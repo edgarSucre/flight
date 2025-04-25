@@ -2,7 +2,9 @@ package fapi
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"os"
@@ -11,11 +13,32 @@ import (
 	"github.com/edgarSucre/flight"
 )
 
-type (
-	cheapestPrice struct {
-		Amount float64 `json:"amount"`
+var (
+	ErrContextCancelled = errors.New("request time out")
+)
+
+func (c *Client) Search(ctx context.Context, params flight.SearchParams) ([]flight.Info, error) {
+	if c.env == "dev" {
+		return c.fakeIT()
 	}
 
+	params = flight.SetDefaultParams(params)
+
+	searchResponse, err := search(
+		ctx,
+		c.host,
+		c.key,
+		params,
+	)
+
+	if err != nil {
+		return nil, fmt.Errorf("fapi.search: %w", err)
+	}
+
+	return searchResponse.buildResponse(), nil
+}
+
+type (
 	price struct {
 		Amount float64 `json:"amount"`
 	}
@@ -23,13 +46,6 @@ type (
 	pricingOptions struct {
 		AgentIDs []string `json:"agent_ids"`
 		Price    price    `json:"price"`
-	}
-
-	itinerary struct {
-		CheapestPrice  cheapestPrice    `json:"cheapest_price"`
-		ID             string           `json:"id"`
-		LegIDs         []string         `json:"leg_ids"`
-		PricingOptions []pricingOptions `json:"pricing_options"`
 	}
 
 	leg struct {
@@ -41,21 +57,53 @@ type (
 		ID   string `json:"id"`
 		Name string `json:"name"`
 	}
-
-	searchResponse struct {
-		Itineraries []itinerary `json:"itineraries"`
-		Legs        []leg       `json:"legs"`
-		Agents      []agent     `json:"agents"`
-	}
 )
 
-// Clean this up
-func (resp searchResponse) buildInfo() []flight.Info {
+type itinerary struct {
+	ID             string           `json:"id"`
+	LegIDs         []string         `json:"leg_ids"`
+	PricingOptions []pricingOptions `json:"pricing_options"`
+}
+
+func (it itinerary) cheapest() pricingOptions {
+	cheapest := it.PricingOptions[0]
+
+	for _, opt := range it.PricingOptions {
+		if opt.Price.Amount < cheapest.Price.Amount {
+			cheapest = opt
+		}
+	}
+
+	return cheapest
+}
+
+func (it itinerary) buildInfo(
+	legsIdx map[string]int,
+	agentsIdx map[string]string,
+) flight.Info {
+	duration := time.Duration(legsIdx[it.LegIDs[0]])
+
+	cheapest := it.cheapest()
+
+	info := flight.Info{
+		Price:    cheapest.Price.Amount,
+		Agent:    agentsIdx[cheapest.AgentIDs[0]],
+		Duration: time.Duration(time.Minute * duration),
+	}
+
+	return info
+}
+
+type searchResponse struct {
+	Itineraries []itinerary `json:"itineraries"`
+	Legs        []leg       `json:"legs"`
+	Agents      []agent     `json:"agents"`
+}
+
+func (resp searchResponse) buildResponse() []flight.Info {
 	if len(resp.Itineraries) == 0 {
 		return nil
 	}
-
-	infoResponse := make([]flight.Info, len(resp.Itineraries))
 
 	legsIdx := make(map[string]int)
 	agentsIdx := make(map[string]string)
@@ -68,54 +116,16 @@ func (resp searchResponse) buildInfo() []flight.Info {
 		agentsIdx[a.ID] = a.Name
 	}
 
+	infoResponse := make([]flight.Info, len(resp.Itineraries))
+
 	for i, it := range resp.Itineraries {
-		duration := time.Duration(legsIdx[it.LegIDs[0]])
-
-		cheapest := it.PricingOptions[0]
-
-		for _, opt := range it.PricingOptions {
-			if opt.Price.Amount < cheapest.Price.Amount {
-				cheapest = opt
-			}
-		}
-
-		info := flight.Info{
-			Price:    cheapest.Price.Amount,
-			Agent:    agentsIdx[cheapest.AgentIDs[0]],
-			Duration: time.Duration(time.Minute * duration),
-		}
-
-		infoResponse[i] = info
+		infoResponse[i] = it.buildInfo(legsIdx, agentsIdx)
 	}
 
 	return infoResponse
 }
 
-func (c *Client) Search(params flight.SearchParams) ([]flight.Info, error) {
-	if c.env == "dev" {
-		return c.fakeIT()
-	}
-
-	if err := params.Validate(); err != nil {
-		return nil, fmt.Errorf("SearchParams.Validate: %w", err)
-	}
-
-	params = flight.SetDefaultParams(params)
-
-	searchResponse, err := search(
-		c.host,
-		c.key,
-		params,
-	)
-
-	if err != nil {
-		return nil, fmt.Errorf("fapi.search: %w", err)
-	}
-
-	return searchResponse.buildInfo(), nil
-}
-
-func search(host, key string, params flight.SearchParams) (searchResponse, error) {
+func search(ctx context.Context, host, key string, params flight.SearchParams) (searchResponse, error) {
 	url := fmt.Sprintf(
 		"%s/%s/%s/%s/%s/%v/%v/%v/%s/%s",
 		host,
@@ -141,11 +151,29 @@ func search(host, key string, params flight.SearchParams) (searchResponse, error
 		Timeout: time.Duration(time.Second * 15),
 	}
 
-	response, err := client.Do(req)
-	if err != nil {
-		return searchResponse{}, fmt.Errorf("http.Client.Do: %w", err)
-	}
+	respCh := make(chan *http.Response)
+	errCh := make(chan error)
 
+	go func() {
+		resp, err := client.Do(req)
+		if err != nil {
+			errCh <- fmt.Errorf("http.Client.Do: %w", err)
+		}
+
+		respCh <- resp
+	}()
+
+	select {
+	case resp := <-respCh:
+		return decode(resp)
+	case err = <-errCh:
+		return searchResponse{}, err
+	case <-ctx.Done():
+		return searchResponse{}, ErrContextCancelled
+	}
+}
+
+func decode(response *http.Response) (searchResponse, error) {
 	decoder := json.NewDecoder(response.Body)
 
 	var payload searchResponse
@@ -171,5 +199,5 @@ func (c *Client) fakeIT() ([]flight.Info, error) {
 		return nil, err
 	}
 
-	return jsonResponse.buildInfo(), nil
+	return jsonResponse.buildResponse(), nil
 }

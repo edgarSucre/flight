@@ -1,6 +1,8 @@
 package flight
 
 import (
+	"context"
+	"errors"
 	"time"
 )
 
@@ -89,8 +91,28 @@ type SearchParams struct {
 	NumInfants       int
 }
 
-// TODO: implement validation
+var (
+	ErrInvalidArrivalCode   = errors.New("destination airport code must be a valid 3 letter IATA code")
+	ErrInvalidDepartureCode = errors.New("origin airport code must be a valid 3 letter IATA code")
+	ErrInvalidDepartureDate = errors.New("departure date is invalid")
+)
+
 func (params SearchParams) Validate() error {
+	if len(params.ArrivalAirport) < 3 || len(params.ArrivalAirport) > 3 {
+		return ErrInvalidArrivalCode
+	}
+
+	if len(params.DepartureAirport) < 3 || len(params.DepartureAirport) > 3 {
+		return ErrInvalidDepartureCode
+	}
+
+	today := time.Now()
+	minDate := time.Date(today.Year(), today.Month(), today.Day(), 0, 0, 0, 0, time.UTC)
+
+	if params.DepartureDate.Before(minDate) {
+		return ErrInvalidDepartureDate
+	}
+
 	return nil
 }
 
@@ -103,9 +125,13 @@ func SetDefaultParams(params SearchParams) SearchParams {
 		params.Currency = "USD"
 	}
 
+	if len(params.CabinClass) == 0 {
+		params.CabinClass = "Economy"
+	}
+
 	return params
 }
 
 type Provider interface {
-	Search(params SearchParams) ([]Info, error)
+	Search(ctx context.Context, params SearchParams) ([]Info, error)
 }
