@@ -13,7 +13,7 @@ type ctxKey string
 
 const (
 	authHeader          = "Authorization"
-	bearerPrefix        = "Bearer "
+	bearerPrefix        = "Bearer"
 	userCtxKey   ctxKey = "username"
 )
 
@@ -38,7 +38,7 @@ func jwtMiddleware(next http.Handler, tokenMaker token.Maker) http.Handler {
 			return
 		}
 
-		username, err := tokenMaker.VerifyToken(auth[len(bearerPrefix):])
+		username, err := tokenMaker.VerifyToken(auth[len(bearerPrefix)+1:])
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusUnauthorized)
 			return

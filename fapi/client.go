@@ -1,16 +1,18 @@
 package fapi
 
+import "github.com/edgarSucre/flight"
+
 type Client struct {
-	host string
-	key  string
-	env  string
+	host      string
+	key       string
+	requester flight.Requester
 }
 
 // TODO: remove environment from client
-func NewClient(apiKey, apiHost, environment string) *Client {
+func NewClient(apiKey, apiHost string, r flight.Requester) *Client {
 	return &Client{
-		env:  environment,
-		host: apiHost,
-		key:  apiKey,
+		host:      apiHost,
+		key:       apiKey,
+		requester: r,
 	}
 }

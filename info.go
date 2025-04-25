@@ -3,6 +3,7 @@ package flight
 import (
 	"context"
 	"errors"
+	"io"
 	"time"
 )
 
@@ -94,7 +95,7 @@ type SearchParams struct {
 var (
 	ErrInvalidArrivalCode   = errors.New("destination airport code must be a valid 3 letter IATA code")
 	ErrInvalidDepartureCode = errors.New("origin airport code must be a valid 3 letter IATA code")
-	ErrInvalidDepartureDate = errors.New("departure date is invalid")
+	ErrInvalidDepartureDate = errors.New("departure date can't be in the past")
 )
 
 func (params SearchParams) Validate() error {
@@ -134,4 +135,14 @@ func SetDefaultParams(params SearchParams) SearchParams {
 
 type Provider interface {
 	Search(ctx context.Context, params SearchParams) ([]Info, error)
+}
+
+type Requester interface {
+	MakeRequest(
+		ctx context.Context,
+		method string,
+		url string,
+		body io.Reader,
+		headers map[string]string,
+	) (io.Reader, int, error)
 }

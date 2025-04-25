@@ -2,6 +2,7 @@ package http
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"time"
 
@@ -30,7 +31,7 @@ func handleLogin(tokenMaker token.Maker, config util.Config) http.Handler {
 		decoder := json.NewDecoder(r.Body)
 
 		if err := decoder.Decode(&req); err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
+			http.Error(w, "bad credentials", http.StatusBadRequest)
 			return
 		}
 
@@ -41,7 +42,9 @@ func handleLogin(tokenMaker token.Maker, config util.Config) http.Handler {
 
 		token, err := tokenMaker.CreateToken(req.Username, duration)
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			log.Println(err)
+
+			http.Error(w, "could not login, server error", http.StatusInternalServerError)
 			return
 		}
 

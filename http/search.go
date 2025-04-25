@@ -44,6 +44,7 @@ func handleSearch(providers []flight.Provider) http.Handler {
 
 		resp := buildResponse(data)
 
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
 
 		encoder := json.NewEncoder(w)

@@ -18,8 +18,6 @@ func NewServer(
 
 	var handler http.Handler = mux
 	handler = jwtMiddleware(handler, tokenMaker)
-	// handler = someMiddleware(handler)
-	// handler = someMiddleware2(handler)
-	// handler = someMiddleware3(handler)
+
 	return handler
 }

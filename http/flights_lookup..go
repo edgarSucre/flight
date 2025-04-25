@@ -3,6 +3,7 @@ package http
 import (
 	"context"
 	"errors"
+	"log"
 	"sort"
 	"sync"
 
@@ -36,7 +37,7 @@ func lookUpFlights(
 	workingProviders := n
 
 	infoCh := make(chan []flight.Info, n)
-	errCh := make(chan bool)
+	errCh := make(chan error)
 	done := make(chan bool)
 
 	data := make([]flight.Info, 0)
@@ -44,7 +45,8 @@ func lookUpFlights(
 	go func() {
 		for {
 			select {
-			case <-errCh:
+			case err := <-errCh:
+				log.Println(err)
 				workingProviders--
 			case info := <-infoCh:
 				data = append(data, info...)
@@ -65,7 +67,7 @@ func lookUpFlights(
 			info, err := p.Search(ctx, params)
 
 			if err != nil {
-				errCh <- true
+				errCh <- err
 				return
 			}
 

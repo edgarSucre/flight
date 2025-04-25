@@ -29,7 +29,7 @@ func run(ctx context.Context) error {
 	}
 
 	providers := []flight.Provider{
-		fapi.NewClient(config.FlightAPIKey, config.FlightAPIURL, config.Environment),
+		fapi.NewClient(config.FlightAPIKey, config.FlightAPIURL, fapi.Requester{}),
 	}
 
 	tokenMaker, err := token.NewJWTMaker(config.JwtKey)
