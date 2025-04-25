@@ -1,0 +1,13 @@
+**/.DS_Store
+.env
+build
+
+.vscode
+
+coverage.out
+
+keys
+
+response_*
+sample
+app.env
