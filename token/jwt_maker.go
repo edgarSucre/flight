@@ -9,8 +9,9 @@ import (
 )
 
 var (
-	ErrInvalidToken = errors.New("token is invalid")
-	ErrExpiredToken = errors.New("token has expired")
+	ErrExpiredToken     = errors.New("token has expired")
+	ErrInvalidToken     = errors.New("token is invalid")
+	ErrInvalidSecretKey = errors.New("secret key is too short")
 )
 
 const (
@@ -23,7 +24,7 @@ type JWTMaker struct {
 
 func NewJWTMaker(secretKey string) (*JWTMaker, error) {
 	if len(secretKey) < minSecretKeySize {
-
+		return nil, ErrInvalidSecretKey
 	}
 
 	return &JWTMaker{secretKey}, nil
