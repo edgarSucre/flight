@@ -40,13 +40,28 @@ func run(ctx context.Context) error {
 
 	srv := fHttp.NewServer(providers, tokenMaker, config)
 
+	// httpServer := &http.Server{
+	// 	Addr:    net.JoinHostPort(config.Host, config.Port),
+	// 	Handler: srv,
+	// }
+	// go func() {
+	// 	log.Printf("listening on %s\n", httpServer.Addr)
+	// 	if err := httpServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+	// 		fmt.Fprintf(os.Stderr, "error listening and serving: %s\n", err)
+	// 	}
+	// }()
+
 	httpServer := &http.Server{
 		Addr:    net.JoinHostPort(config.Host, config.Port),
 		Handler: srv,
 	}
+
 	go func() {
 		log.Printf("listening on %s\n", httpServer.Addr)
-		if err := httpServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		cert := util.FilePath("server.crt")
+		key := util.FilePath("server.key")
+
+		if err := httpServer.ListenAndServeTLS(cert, key); err != nil && err != http.ErrServerClosed {
 			fmt.Fprintf(os.Stderr, "error listening and serving: %s\n", err)
 		}
 	}()

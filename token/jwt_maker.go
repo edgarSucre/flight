@@ -1,10 +1,15 @@
 package token
 
 import (
+	"crypto/rsa"
+	"crypto/x509"
+	"encoding/pem"
 	"errors"
 	"fmt"
+	"os"
 	"time"
 
+	"github.com/edgarSucre/flight/util"
 	"github.com/golang-jwt/jwt/v5"
 )
 
@@ -15,6 +20,8 @@ var (
 )
 
 const (
+
+	// TODO remove all references to secret key, including .env
 	minSecretKeySize = 32
 )
 
@@ -36,18 +43,33 @@ func (maker *JWTMaker) CreateToken(username string, duration time.Duration) (str
 		return "", fmt.Errorf("unable to create token claims: %w", err)
 	}
 
-	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	// jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	return jwtToken.SignedString([]byte(maker.secretKey))
+	// return jwtToken.SignedString([]byte(maker.secretKey))
+
+	key, err := getPrivateKey()
+	if err != nil {
+		return "", fmt.Errorf("unable to load certificate: %w", err)
+	}
+
+	jwtToken := jwt.NewWithClaims(jwt.SigningMethodRS512, claims)
+
+	return jwtToken.SignedString(key)
 }
 
 func (maker *JWTMaker) VerifyToken(token string) (string, error) {
 	keyFunc := func(token *jwt.Token) (any, error) {
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+		// if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+		// 	return "", ErrInvalidToken
+		// }
+
+		// return []byte(maker.secretKey), nil
+
+		if _, ok := token.Method.(*jwt.SigningMethodRSA); !ok {
 			return "", ErrInvalidToken
 		}
 
-		return []byte(maker.secretKey), nil
+		return getPublicKey()
 	}
 
 	jwtToken, err := jwt.ParseWithClaims(token, &jwt.RegisteredClaims{}, keyFunc)
@@ -65,4 +87,39 @@ func (maker *JWTMaker) VerifyToken(token string) (string, error) {
 	}
 
 	return claims.Subject, nil
+}
+
+func getPrivateKey() (any, error) {
+	payload, err := os.ReadFile(util.FilePath("server.key"))
+	if err != nil {
+		return nil, err
+	}
+
+	block, _ := pem.Decode(payload)
+
+	key, err := x509.ParsePKCS8PrivateKey(block.Bytes)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return key, nil
+}
+
+func getPublicKey() (any, error) {
+	payload, err := os.ReadFile(util.FilePath("server.crt"))
+	if err != nil {
+		return nil, err
+	}
+
+	block, _ := pem.Decode(payload)
+
+	cert, err := x509.ParseCertificate(block.Bytes)
+	if err != nil {
+		return nil, err
+	}
+
+	key := cert.PublicKey.(*rsa.PublicKey)
+
+	return key, nil
 }
