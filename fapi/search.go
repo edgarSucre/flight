@@ -126,11 +126,11 @@ func (c *Client) search(ctx context.Context, params flight.SearchParams) (search
 		c.key,
 		params.DepartureAirport,
 		params.ArrivalAirport,
-		params.DepartureDate,
+		params.DepartureDate.Format(time.DateOnly),
 		params.NumAdults,
 		params.NumChildren,
 		params.NumInfants,
-		params.CabinClass,
+		"Economy",
 		params.Currency,
 	)
 

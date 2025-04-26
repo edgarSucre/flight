@@ -8,6 +8,9 @@ import (
 )
 
 type Config struct {
+	AmadeusAPIKey       string `mapstructure:"AMADEUS_API_KEY"`
+	AmadeusAPISecret    string `mapstructure:"AMADEUS_API_SECRET"`
+	AmadeusAPIBaseURL   string `mapstructure:"AMADEUS_API_BASE_URL"`
 	DefaultUserName     string `mapstructure:"DEFAULT_USER_NAME"`
 	DefaultUserPassword string `mapstructure:"DEFAULT_USER_PASS"`
 	Environment         string `mapstructure:"ENVIRONMENT"`
@@ -19,6 +22,18 @@ type Config struct {
 }
 
 func (c Config) Validate() error {
+	if len(c.AmadeusAPIKey) == 0 {
+		return ErrMissingEnvironmentVariable("AMADEUS_API_KEY")
+	}
+
+	if len(c.AmadeusAPISecret) == 0 {
+		return ErrMissingEnvironmentVariable("AMADEUS_API_SECRET")
+	}
+
+	if len(c.AmadeusAPIBaseURL) == 0 {
+		return ErrMissingEnvironmentVariable("AMADEUS_API_BASE_URL")
+	}
+
 	if len(c.DefaultUserName) == 0 {
 		return ErrMissingEnvironmentVariable("DEFAULT_USER_NAME")
 	}

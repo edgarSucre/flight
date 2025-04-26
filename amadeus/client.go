@@ -9,7 +9,7 @@ type Client struct {
 	key       string
 	requester flight.Requester
 	secret    string
-	tokens    map[string][]byte
+	tokens    map[string]tokenEntry
 }
 
 func NewClient(apiKey, apiSecret, baseUrl string, r flight.Requester) *Client {
@@ -18,5 +18,6 @@ func NewClient(apiKey, apiSecret, baseUrl string, r flight.Requester) *Client {
 		key:       apiKey,
 		requester: r,
 		secret:    apiSecret,
+		tokens:    make(map[string]tokenEntry),
 	}
 }

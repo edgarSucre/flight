@@ -4,8 +4,10 @@ import (
 	"context"
 	"errors"
 	"log"
+	"math"
 	"sort"
 	"sync"
+	"time"
 
 	"github.com/edgarSucre/flight"
 )
@@ -91,15 +93,23 @@ func buildResponse(data []flight.Info) lookUpResponse {
 	}
 
 	byPrice := flight.InfoByPrice(data)
-
 	sort.Sort(byPrice)
 
 	cheapest := byPrice[0]
-	fastest := byPrice.Fastest()
+
+	fastest := flight.Info{
+		Duration: time.Duration(math.MaxInt),
+	}
 
 	comparison := make([]flightInfo, len(data))
 
 	for i, v := range byPrice {
+		if v.Duration < fastest.Duration {
+			fastest = v
+		} else if v.Duration == fastest.Duration && v.Price < fastest.Price {
+			fastest = v
+		}
+
 		comparison[i] = buildInfo(v)
 	}
 

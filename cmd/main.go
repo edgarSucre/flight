@@ -31,6 +31,12 @@ func run(ctx context.Context) error {
 
 	providers := []flight.Provider{
 		fapi.NewClient(config.FlightAPIKey, config.FlightAPIURL, fapi.Requester{}),
+		// amadeus.NewClient(
+		// 	config.AmadeusAPIKey,
+		// 	config.AmadeusAPISecret,
+		// 	config.AmadeusAPIBaseURL,
+		// 	util.HttpRequester{},
+		// ),
 	}
 
 	tokenMaker, err := token.NewJWTMaker(config.JwtKey)

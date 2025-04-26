@@ -1,10 +1,11 @@
 package amadeus
 
 import (
+	"bytes"
 	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 
@@ -18,52 +19,181 @@ type authResponse struct {
 }
 
 type tokenEntry struct {
-	AccessToken string `json:"access_token"`
+	AccessToken string
 	ExpiresAt   time.Time
+}
+
+func (t tokenEntry) valid() bool {
+	return t.ExpiresAt.After(time.Now())
 }
 
 func (c *Client) Search(ctx context.Context, params flight.SearchParams) ([]flight.Info, error) {
 	params = flight.SetDefaultParams(params)
 
-	// TODO: move ctx to domain, so you can use here
-	username := ctx.Value("username").(string)
-	if payload, ok := c.tokens[username]; ok {
-		var token tokenEntry
+	username := ctx.Value(flight.UserCtxKey).(string)
 
-		err := json.Unmarshal(payload, &token)
-		if err != nil {
-			// get new token
-		}
-
-		if time.Now().After(token.ExpiresAt) {
-			// get new token
-		}
-
-		// use same token
+	token, err := c.getToken(ctx, username)
+	if err != nil {
+		return nil, err
 	}
 
-	return nil, nil
+	c.tokens[username] = token
+
+	r, err := c.search(ctx, params, token.AccessToken)
+	if err != nil {
+		return nil, fmt.Errorf("amadeus.search: %w", err)
+	}
+
+	return r.buildResponse(), nil
 }
 
 const (
 	flightEndpoint = "/v2/shopping/flight-offers"
+	oauthEndpoint  = "v1/security/oauth2/token"
 )
+
+func (c *Client) getToken(ctx context.Context, username string) (tokenEntry, error) {
+	if token, ok := c.tokens[username]; ok && token.valid() {
+		return token, nil
+	}
+
+	var payload bytes.Buffer
+	payload.WriteString(
+		fmt.Sprintf("grant_type=client_credentials&client_id=%s&client_secret=%s", c.key, c.secret),
+	)
+
+	url := fmt.Sprintf("%s/%s", c.baseUrl, oauthEndpoint)
+
+	reader, _, err := c.requester.MakeRequest(
+		ctx,
+		http.MethodPost,
+		url,
+		&payload,
+		util.URLEncoded,
+	)
+
+	if err != nil {
+		return tokenEntry{}, fmt.Errorf("could not authenticate with amadeus: %w", err)
+	}
+
+	var auth authResponse
+
+	err = util.JsonDecode(reader, &auth)
+	if err != nil {
+		return tokenEntry{}, fmt.Errorf("could not authenticate with amadeus: %w", err)
+	}
+
+	return tokenEntry{
+		AccessToken: auth.AccessToken,
+		ExpiresAt:   time.Now().Add(time.Duration(auth.ExpiresIn) * time.Second),
+	}, nil
+}
+
+type (
+	segment struct {
+		CarrierCode string `json:"carrierCode"`
+	}
+
+	itinerary struct {
+		Duration string    `json:"duration"`
+		Segments []segment `json:"segments"`
+	}
+)
+
+func (it itinerary) duration() time.Duration {
+	d := it.Duration
+	if strings.HasPrefix(d, "PT") {
+		d = strings.TrimPrefix(d, "PT")
+	}
+
+	d = strings.ToLower(d)
+	t, _ := time.ParseDuration(d)
+
+	return t
+}
+
+func (it itinerary) buildInfo(agentsIdx map[string]string) flight.Info {
+	var b strings.Builder
+
+	for _, v := range it.Segments {
+		if agent, ok := agentsIdx[v.CarrierCode]; ok {
+			b.WriteString(fmt.Sprintf("%s-", agent))
+		}
+	}
+
+	return flight.Info{
+		Duration: it.duration(),
+		Agent:    strings.TrimSuffix(b.String(), "-"),
+	}
+}
+
+type (
+	price struct {
+		Total string `json:"total"`
+	}
+
+	data struct {
+		Itineraries []itinerary `json:"itineraries"`
+		Price       price       `json:"price"`
+	}
+)
+
+type (
+	dictionary struct {
+		Carriers map[string]string `json:"carriers"`
+	}
+
+	searchResponse struct {
+		Data         []data     `json:"data"`
+		Dictionaries dictionary `json:"dictionaries"`
+	}
+)
+
+func (resp searchResponse) buildResponse() []flight.Info {
+	if len(resp.Data) == 0 {
+		return nil
+	}
+
+	agentsIdx := make(map[string]string)
+
+	for k, v := range resp.Dictionaries.Carriers {
+		agentsIdx[k] = v
+	}
+
+	infoResponse := make([]flight.Info, 0, len(resp.Data))
+
+	for _, d := range resp.Data {
+
+		price, err := strconv.ParseFloat(d.Price.Total, 64)
+		if err != nil {
+			continue
+		}
+
+		for _, it := range d.Itineraries {
+			info := it.buildInfo(agentsIdx)
+			info.Price = price
+
+			infoResponse = append(infoResponse, info)
+		}
+	}
+
+	return infoResponse
+
+}
 
 func (c *Client) search(
 	ctx context.Context,
 	params flight.SearchParams,
 	token string,
-) ([]string, error) {
+) (searchResponse, error) {
 	var builder strings.Builder
 
 	builder.WriteString(fmt.Sprintf("%s/%s", c.baseUrl, flightEndpoint))
 	builder.WriteString(fmt.Sprintf("?originLocationCode=%s", params.DepartureAirport))
 	builder.WriteString(fmt.Sprintf("&destinationLocationCode=%s", params.ArrivalAirport))
-	builder.WriteString(fmt.Sprintf("&departureDate=%s", params.DepartureDate))
-	builder.WriteString(fmt.Sprintf("&adults=%s", params.NumAdults))
-
-	// TODO: make sure cabin class match
-	builder.WriteString(fmt.Sprintf("&travelClass=%s", params.CabinClass))
+	builder.WriteString(fmt.Sprintf("&departureDate=%s", params.DepartureDate.Format(time.DateOnly)))
+	builder.WriteString(fmt.Sprintf("&adults=%v", params.NumAdults))
+	builder.WriteString(fmt.Sprintf("&travelClass=%s", "ECONOMY"))
 	builder.WriteString(fmt.Sprintf("&currencyCode=%s", params.Currency))
 
 	url := builder.String()
@@ -73,7 +203,7 @@ func (c *Client) search(
 		http.MethodGet,
 		url,
 		nil,
-		map[string]string{"accept": "application/vnd.amadeus+json"},
+		map[string]string{"Authorization": fmt.Sprintf("Bearer %s", token)},
 	)
 
 	if err != nil {

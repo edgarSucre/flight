@@ -28,6 +28,10 @@ func (s InfoByPrice) Swap(i, j int) {
 }
 
 func (s InfoByPrice) Less(i, j int) bool {
+	if s[i].Price == s[j].Price {
+		return s[i].Duration < s[j].Duration
+	}
+
 	return s[i].Price < s[j].Price
 }
 
@@ -49,41 +53,8 @@ func (s InfoByPrice) Cheapest() Info {
 	return cheapest
 }
 
-func (s InfoByPrice) Fastest() Info {
-	var fastest Info
-
-	if len(s) == 0 {
-		return fastest
-	}
-
-	fastest = s[0]
-
-	for _, v := range s {
-		if v.Duration < fastest.Duration {
-			fastest = v
-		}
-	}
-
-	return fastest
-}
-
-const (
-	Business       Cabin = "Business"
-	Economy        Cabin = "Economy"
-	First          Cabin = "First"
-	PremiumEconomy Cabin = "Premium_Economy"
-)
-
-var ValidCabins = map[string]struct{}{
-	"Business":        {},
-	"Economy":         {},
-	"First":           {},
-	"Premium_Economy": {},
-}
-
 type SearchParams struct {
 	ArrivalAirport   string
-	CabinClass       string
 	Currency         string
 	DepartureAirport string
 	DepartureDate    time.Time
@@ -126,10 +97,6 @@ func SetDefaultParams(params SearchParams) SearchParams {
 		params.Currency = "USD"
 	}
 
-	if len(params.CabinClass) == 0 {
-		params.CabinClass = "Economy"
-	}
-
 	return params
 }
 
@@ -146,3 +113,7 @@ type Requester interface {
 		headers map[string]string,
 	) (io.Reader, int, error)
 }
+
+type CtxKey string
+
+var UserCtxKey CtxKey = "username"

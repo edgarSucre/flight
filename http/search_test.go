@@ -14,26 +14,32 @@ import (
 	"time"
 
 	"github.com/edgarSucre/flight"
+	"github.com/edgarSucre/flight/amadeus"
 	"github.com/edgarSucre/flight/fapi"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestSearch(t *testing.T) {
-	errCh := make(chan error)
+	flightApiErr := make(chan error, 2)
+	flightApiProvider := flightAPI(t, flightApiErr)
 
-	flightApiProvider := flightAPI(t, errCh)
+	amadeusApiErr := make(chan error, 2)
+	amadeusApiProvider := amadeusAPI(t, amadeusApiErr)
 
 	validCtx := context.Background()
+	validCtx = context.WithValue(validCtx, flight.UserCtxKey, "username")
 	expiredCtx, _ := context.WithTimeout(validCtx, time.Nanosecond)
 
 	tests := []struct {
 		name  string
 		req   *http.Request
+		stub  func()
 		check func(t *testing.T, response *http.Response)
 	}{
 		{
 			"invalidDate",
 			newSerchRequest(t, validCtx, "JFK", "SFO", "2030-13-02"),
+			nil,
 			func(t *testing.T, response *http.Response) {
 				assert.Equal(t, response.StatusCode, http.StatusBadRequest)
 
@@ -45,6 +51,7 @@ func TestSearch(t *testing.T) {
 		{
 			"invalidOrigin",
 			newSerchRequest(t, validCtx, "SFSL", "SFO", "2030-10-02"),
+			nil,
 			func(t *testing.T, response *http.Response) {
 				assert.Equal(t, response.StatusCode, http.StatusBadRequest)
 
@@ -56,6 +63,7 @@ func TestSearch(t *testing.T) {
 		{
 			"invalidDestination",
 			newSerchRequest(t, validCtx, "JFK", "SFOS", "2030-10-02"),
+			nil,
 			func(t *testing.T, response *http.Response) {
 				assert.Equal(t, response.StatusCode, http.StatusBadRequest)
 
@@ -67,6 +75,7 @@ func TestSearch(t *testing.T) {
 		{
 			"timeOut",
 			newSerchRequest(t, expiredCtx, "JFK", "SFO", "2030-10-02"),
+			nil,
 			func(t *testing.T, response *http.Response) {
 				assert.Equal(t, response.StatusCode, http.StatusInternalServerError)
 
@@ -78,6 +87,10 @@ func TestSearch(t *testing.T) {
 		{
 			"successWithFlightApi",
 			newSerchRequest(t, validCtx, "JFK", "SFO", "2030-10-02"),
+			func() {
+				// make amadeus fail so cheaper comes from flight api
+				amadeusApiErr <- fmt.Errorf("amadeus failed")
+			},
 			func(t *testing.T, response *http.Response) {
 				assert.Equal(t, response.StatusCode, http.StatusOK)
 
@@ -97,11 +110,90 @@ func TestSearch(t *testing.T) {
 				fastest := flightInfo{
 					Agent:    "BudgetAir",
 					Duration: "6h10m0s",
+					Price:    98.97,
+				}
+
+				assert.Equal(t, cheapest, payload.Cheapest)
+				assert.Equal(t, fastest, payload.Fastest)
+			},
+		},
+		{
+			"successWithAmadeusApi",
+			newSerchRequest(t, validCtx, "JFK", "SFO", "2030-10-02"),
+			func() {
+				// make flight api fail so cheaper comes from amadeus
+				flightApiErr <- fmt.Errorf("flight api failed")
+			},
+			func(t *testing.T, response *http.Response) {
+				assert.Equal(t, response.StatusCode, http.StatusOK)
+
+				decoder := json.NewDecoder(response.Body)
+
+				var payload lookUpResponse
+
+				err := decoder.Decode(&payload)
+				assert.NoError(t, err)
+
+				cheapest := flightInfo{
+					Agent:    "ALASKA AIRLINES",
+					Duration: "6h28m0s",
+					Price:    149.25,
+				}
+
+				fastest := flightInfo{
+					Agent:    "JETBLUE AIRWAYS",
+					Duration: "6h17m0s",
+					Price:    173.45,
+				}
+
+				assert.Equal(t, cheapest, payload.Cheapest)
+				assert.Equal(t, fastest, payload.Fastest)
+			},
+		},
+		{
+			"comparison",
+			newSerchRequest(t, validCtx, "JFK", "SFO", "2030-10-02"),
+			nil, // all providers will submit their results
+			func(t *testing.T, response *http.Response) {
+				assert.Equal(t, response.StatusCode, http.StatusOK)
+
+				decoder := json.NewDecoder(response.Body)
+
+				var payload lookUpResponse
+
+				err := decoder.Decode(&payload)
+				assert.NoError(t, err)
+
+				cheapest := flightInfo{
+					Agent:    "BudgetAir",
+					Duration: "6h20m0s",
 					Price:    98.96,
 				}
 
-				assert.Equal(t, payload.Cheapest, cheapest)
-				assert.Equal(t, payload.Fastest, fastest)
+				fastest := flightInfo{
+					Agent:    "BudgetAir",
+					Duration: "6h10m0s",
+					Price:    98.97,
+				}
+
+				assert.Equal(t, cheapest, payload.Cheapest)
+				assert.Equal(t, fastest, payload.Fastest)
+			},
+		},
+		{
+			"allFail",
+			newSerchRequest(t, validCtx, "JFK", "SFO", "2030-10-02"),
+			func() {
+				// make all fail
+				flightApiErr <- fmt.Errorf("flight api failed")
+				amadeusApiErr <- fmt.Errorf("amadeus api failed")
+			},
+			func(t *testing.T, response *http.Response) {
+				assert.Equal(t, response.StatusCode, http.StatusInternalServerError)
+
+				payload, _ := io.ReadAll(response.Body)
+				errMsg := "unable to look up flight prices\n"
+				assert.Equal(t, errMsg, string(payload))
 			},
 		},
 	}
@@ -110,7 +202,11 @@ func TestSearch(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			rec := httptest.NewRecorder()
 
-			handler := handleSearch([]flight.Provider{flightApiProvider})
+			handler := handleSearch([]flight.Provider{flightApiProvider, amadeusApiProvider})
+
+			if tt.stub != nil {
+				tt.stub()
+			}
 
 			handler.ServeHTTP(rec, tt.req)
 
@@ -127,10 +223,24 @@ func flightAPI(
 
 	r := requester{
 		err:  err,
-		path: "",
+		path: "fapi_mock_response.json",
 	}
 
 	return fapi.NewClient("key", "host", r)
+}
+
+func amadeusAPI(
+	t *testing.T,
+	err chan error,
+) flight.Provider {
+	t.Helper()
+
+	r := requester{
+		err:  err,
+		path: "amadeus_mock_response.json",
+	}
+
+	return amadeus.NewClient("key", "secret", "url", r)
 }
 
 type requester struct {
@@ -151,7 +261,7 @@ func (r requester) MakeRequest(
 	case <-ctx.Done():
 		return nil, 0, fmt.Errorf("time out")
 	default:
-		return loadTestData("fapi_mock_response.json")
+		return loadTestData(r.path)
 	}
 }
 

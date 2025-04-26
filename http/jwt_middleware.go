@@ -6,15 +6,13 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/edgarSucre/flight"
 	"github.com/edgarSucre/flight/token"
 )
 
-type ctxKey string
-
 const (
-	authHeader          = "Authorization"
-	bearerPrefix        = "Bearer"
-	userCtxKey   ctxKey = "username"
+	authHeader   = "Authorization"
+	bearerPrefix = "Bearer"
 )
 
 func jwtMiddleware(next http.Handler, tokenMaker token.Maker) http.Handler {
@@ -44,7 +42,7 @@ func jwtMiddleware(next http.Handler, tokenMaker token.Maker) http.Handler {
 			return
 		}
 
-		ctx := context.WithValue(r.Context(), userCtxKey, username)
+		ctx := context.WithValue(r.Context(), flight.UserCtxKey, username)
 
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})

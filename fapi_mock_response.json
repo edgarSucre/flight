@@ -5799,7 +5799,7 @@
                         "vaya"
                     ],
                     "price": {
-                        "amount": 98.96,
+                        "amount": 98.97,
                         "update_status": "current",
                         "last_updated": "2025-04-23T13:30:40",
                         "quote_age": 331
@@ -5808,12 +5808,12 @@
                     "items": [
                         {
                             "agent_id": "vaya",
-                            "url": "/transport_deeplink/4.0/US/en-GB/USD/vaya/1/12712.16216.2025-09-10/air/trava/flights?itinerary=flight|-32593|227|12712|2025-09-10T09:30|16216|2025-09-10T12:40|370|-|-|-&carriers=-32593&operators=-32593&passengers=1&channel=website&cabin_class=economy&fps_session_id=96fdb813-8000-4c80-a2e3-1bc459579694&ticket_price=98.96&is_npt=false&is_multipart=false&client_id=skyscanner_website&q_ids=H4sIAAAAAAAA_-OS4mIpS6xMFGLmWJEsxcxxo06h4X_TMTYjJgVGAITUdqocAAAA|-3694784730610065685|2&q_sources=JACQUARD&commercial_filters=false&q_datetime_utc=2025-04-23T13:30:40&pqid=true&fare_type=base_fare",
+                            "url": "",
                             "segment_ids": [
                                 "12712-16216-2509100930-2509101240--32593"
                             ],
                             "price": {
-                                "amount": 98.96,
+                                "amount": 98.97,
                                 "update_status": "current",
                                 "last_updated": "2025-04-23T13:30:40",
                                 "quote_age": 331
