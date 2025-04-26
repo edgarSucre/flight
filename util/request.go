@@ -9,7 +9,8 @@ import (
 )
 
 var (
-	JSON = map[string]string{"Content-Type": "application/json"}
+	JSON       = map[string]string{"Content-Type": "application/json"}
+	URLEncoded = map[string]string{"Content-Type": "application/x-www-form-urlencoded"}
 )
 
 type HttpRequester struct{}
