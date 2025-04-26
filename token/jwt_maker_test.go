@@ -1,6 +1,7 @@
 package token_test
 
 import (
+	"os"
 	"testing"
 	"time"
 
@@ -16,6 +17,8 @@ func TestJWTMaker(t *testing.T) {
 	}
 
 	username := util.RandomString(6)
+
+	os.Setenv("debug", "true")
 
 	validToken, err := maker.CreateToken(username, time.Minute)
 	assert.NoError(t, err)

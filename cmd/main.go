@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 	"net"
@@ -44,11 +45,20 @@ func run(ctx context.Context) error {
 		Addr:    net.JoinHostPort(config.Host, config.Port),
 		Handler: srv,
 	}
+
 	go func() {
 		log.Printf("listening on %s\n", httpServer.Addr)
-		if err := httpServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		cert := util.FilePath("certs/server.crt")
+		key := util.FilePath("certs/server.key")
+
+		if err := httpServer.ListenAndServeTLS(cert, key); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			fmt.Fprintf(os.Stderr, "error listening and serving: %s\n", err)
+			cancel()
+
+			return
 		}
+
+		fmt.Fprintln(os.Stdout, " server shutting down..")
 	}()
 
 	var wg sync.WaitGroup

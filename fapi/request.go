@@ -5,7 +5,8 @@ import (
 	"context"
 	"io"
 	"os"
-	"path"
+
+	"github.com/edgarSucre/flight/util"
 )
 
 // temporary file for testing
@@ -19,15 +20,7 @@ func (Requester) MakeRequest(
 	body io.Reader,
 	headers map[string]string,
 ) (io.Reader, int, error) {
-	fullPath, _ := os.Getwd()
-
-	if os.Getenv("debug") == "true" {
-		fullPath = path.Join(fullPath, "..")
-	}
-
-	fullPath = path.Join(fullPath, "fapi_mock_response.json")
-
-	data, err := os.ReadFile(fullPath)
+	data, err := os.ReadFile(util.FilePath("fapi_mock_response.json"))
 	if err != nil {
 		return nil, 0, err
 	}
