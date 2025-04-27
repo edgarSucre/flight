@@ -6,6 +6,7 @@ import (
 	"github.com/edgarSucre/flight"
 	"github.com/edgarSucre/flight/token"
 	"github.com/edgarSucre/flight/util"
+	"github.com/rs/cors"
 )
 
 func NewServer(
@@ -17,7 +18,13 @@ func NewServer(
 	addRoutes(mux, providers, tokenMaker, config)
 
 	var handler http.Handler = mux
+
+	c := cors.New(cors.Options{
+		AllowedOrigins: config.AllowedOrigins,
+	})
+
 	handler = jwtMiddleware(handler, tokenMaker)
+	handler = c.Handler(handler)
 
 	return handler
 }

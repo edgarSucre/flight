@@ -17,7 +17,7 @@ const (
 
 func jwtMiddleware(next http.Handler, tokenMaker token.Maker) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path == "/health" || r.URL.Path == "/user/login" {
+		if strings.HasPrefix(r.URL.Path, "/asset") || r.URL.Path == "/" || r.URL.Path == "/health" || r.URL.Path == "/user/login" {
 			next.ServeHTTP(w, r)
 			return
 		}

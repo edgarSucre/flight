@@ -15,10 +15,13 @@ func addRoutes(
 	tokenMaker token.Maker,
 	config util.Config,
 ) {
+
+	fs := http.FileServer(http.Dir("frontend/dist"))
+
 	mux.Handle("GET /flights/search", handleSearch(providers))
 	mux.Handle("POST /user/login", handleLogin(tokenMaker, config))
 	mux.HandleFunc("GET /health", handleHealth)
-	mux.Handle("/", http.NotFoundHandler())
+	mux.Handle("GET /", fs)
 }
 
 func handleHealth(w http.ResponseWriter, r *http.Request) {

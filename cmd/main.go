@@ -13,7 +13,9 @@ import (
 	"time"
 
 	"github.com/edgarSucre/flight"
+	"github.com/edgarSucre/flight/amadeus"
 	"github.com/edgarSucre/flight/fapi"
+
 	fHttp "github.com/edgarSucre/flight/http"
 	"github.com/edgarSucre/flight/token"
 	"github.com/edgarSucre/flight/util"
@@ -31,12 +33,12 @@ func run(ctx context.Context) error {
 
 	providers := []flight.Provider{
 		fapi.NewClient(config.FlightAPIKey, config.FlightAPIURL, fapi.Requester{}),
-		// amadeus.NewClient(
-		// 	config.AmadeusAPIKey,
-		// 	config.AmadeusAPISecret,
-		// 	config.AmadeusAPIBaseURL,
-		// 	util.HttpRequester{},
-		// ),
+		amadeus.NewClient(
+			config.AmadeusAPIKey,
+			config.AmadeusAPISecret,
+			config.AmadeusAPIBaseURL,
+			util.HttpRequester{},
+		),
 	}
 
 	tokenMaker, err := token.NewJWTMaker(config.JwtKey)
@@ -54,8 +56,8 @@ func run(ctx context.Context) error {
 
 	go func() {
 		log.Printf("listening on %s\n", httpServer.Addr)
-		cert := util.FilePath("certs/server.crt")
-		key := util.FilePath("certs/server.key")
+		cert := util.FilePath("certs/server-cert.pem")
+		key := util.FilePath("certs/server-key.pem")
 
 		if err := httpServer.ListenAndServeTLS(cert, key); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			fmt.Fprintf(os.Stderr, "error listening and serving: %s\n", err)
