@@ -20,7 +20,7 @@ const toast = useToast()
 
 const handleLogin = async () => {
   try {
-    const response = await axios.post<LoginResponse>('https://localhost:8443/user/login', {
+    const response = await axios.post<LoginResponse>('/user/login', {
       username: username.value,
       password: password.value,
     })

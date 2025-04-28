@@ -91,7 +91,7 @@ const onSearch = async () => {
     loading.value = true
     const d = formatDate(date.value)
 
-    const url = `https://localhost:8443/flights/search?origin=${origin.value}&destination=${destination.value}&date=${d}`
+    const url = `/flights/search?origin=${origin.value}&destination=${destination.value}&date=${d}`
 
     const response = await axios.get<SearchResponse>(url, {
       headers: {
