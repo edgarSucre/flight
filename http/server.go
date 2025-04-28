@@ -20,7 +20,9 @@ func NewServer(
 	var handler http.Handler = mux
 
 	c := cors.New(cors.Options{
-		AllowedOrigins: config.AllowedOrigins,
+		AllowedOrigins:   config.AllowedOrigins,
+		AllowCredentials: true,
+		AllowedHeaders:   []string{"authorization", "content-type"},
 	})
 
 	handler = jwtMiddleware(handler, tokenMaker)
