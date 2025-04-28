@@ -44,15 +44,15 @@ onMounted(() => {
   console.log(props.token)
 })
 
-const formatDate = (d) => {
-  const year = d.getFullYear()
-  const month = String(d.getMonth() + 1).padStart(2, '0') // getMonth() returns 0-11, so add 1
-  const day = String(d.getDate()).padStart(2, '0')
+const formatDate = (dateValue: Date) => {
+  const year = dateValue.getFullYear()
+  const month = String(dateValue.getMonth() + 1).padStart(2, '0') // getMonth() returns 0-11, so add 1
+  const day = String(dateValue.getDate()).padStart(2, '0')
 
   return `${year}-${month}-${day}`
 }
 
-const showErr = (msg) => {
+const showErr = (msg: any) => {
   toast.add({
     severity: 'error',
     summary: `Invalid search`,

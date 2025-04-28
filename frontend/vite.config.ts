@@ -18,7 +18,7 @@ export default defineConfig({
     strictPort: true,
   },
   build: {
-    outDir: 'here',
+    outDir: 'static',
     emptyOutDir: true,
   },
 })

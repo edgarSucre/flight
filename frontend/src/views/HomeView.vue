@@ -8,7 +8,7 @@ import { useToast } from 'primevue/usetoast'
 const toast = useToast()
 
 const onLogout = () => {
-  store.ClearUser()
+  store.clearUser()
   toast.add({
     severity: 'success',
     summary: 'Token invalid or expired!',
