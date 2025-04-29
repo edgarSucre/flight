@@ -21,8 +21,10 @@ func TestLogin(t *testing.T) {
 	tokenMaker := tokenMakerMock(t, createErr, verifyErr)
 
 	config := util.Config{
-		DefaultUserName:     "test",
-		DefaultUserPassword: "pass",
+		DefaultUserName: "test",
+
+		// bcrypt for pass
+		DefaultUserPassword: "$2a$10$MPHWRMuKbGEuboeBdd.ERedhScmQ3zd3zWd5fJ2DRePLNu9taYPFy",
 	}
 
 	tests := []struct {
