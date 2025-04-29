@@ -1,6 +1,9 @@
 # Flight
 
-This project aggregates multiple APIs and present a list of available flights sorted by price
+This project aggregates multiple APIs and present a list of available flights sorted by price.
+
+## Video
+You can find the video [here](https://drive.google.com/file/d/16Hw1TMW_bdV3k11rwRzQcUzaRq7wk7-_/view?usp=sharing)
 
 ## Configuration
 This project uses `environment variables` to hold default values and secrets.
@@ -117,4 +120,3 @@ go test ./... -cover -race
 
 ### UI
 The front end is a build vue app served as static files by the http server.
-
