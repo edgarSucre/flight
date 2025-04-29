@@ -40,7 +40,10 @@ const origin = ref()
 const destination = ref()
 const date = ref()
 
-const socket = new WebSocket(`wss:///flights/search/ws?Authorization=${props.token}`)
+const url = new URL(`flights/search/ws?Authorization=${props.token}`, location.href)
+url.protocol = 'wss'
+
+const socket = new WebSocket(url)
 
 socket.onopen = (event) => {
   console.log('WebSocket connection opened:', event)
