@@ -8,18 +8,21 @@ import (
 )
 
 type Config struct {
-	AllowedOrigins      []string `mapstructure:"ALLOWED_ORIGINS"`
-	AmadeusAPIKey       string   `mapstructure:"AMADEUS_API_KEY"`
-	AmadeusAPISecret    string   `mapstructure:"AMADEUS_API_SECRET"`
-	AmadeusAPIBaseURL   string   `mapstructure:"AMADEUS_API_BASE_URL"`
-	DefaultUserName     string   `mapstructure:"DEFAULT_USER_NAME"`
-	DefaultUserPassword string   `mapstructure:"DEFAULT_USER_PASS"`
-	Environment         string   `mapstructure:"ENVIRONMENT"`
-	FlightAPIKey        string   `mapstructure:"FLIGHT_API_KEY"`
-	FlightAPIURL        string   `mapstructure:"FLIGHT_API_URL"`
-	Host                string   `mapstructure:"HTTP_HOST"`
-	JwtKey              string   `mapstructure:"JWT_KEY"`
-	Port                string   `mapstructure:"HTTP_PORT"`
+	AllowedOrigins            []string `mapstructure:"ALLOWED_ORIGINS"`
+	AmadeusAPIKey             string   `mapstructure:"AMADEUS_API_KEY"`
+	AmadeusAPISecret          string   `mapstructure:"AMADEUS_API_SECRET"`
+	AmadeusAPIBaseURL         string   `mapstructure:"AMADEUS_API_BASE_URL"`
+	DefaultUserName           string   `mapstructure:"DEFAULT_USER_NAME"`
+	DefaultUserPassword       string   `mapstructure:"DEFAULT_USER_PASS"`
+	Environment               string   `mapstructure:"ENVIRONMENT"`
+	FlightAPIKey              string   `mapstructure:"FLIGHT_API_KEY"`
+	FlightAPIURL              string   `mapstructure:"FLIGHT_API_URL"`
+	Host                      string   `mapstructure:"HTTP_HOST"`
+	JwtKey                    string   `mapstructure:"JWT_KEY"`
+	Port                      string   `mapstructure:"HTTP_PORT"`
+	SkyScannerRapidAPIBaseURL string   `mapstructure:"SKY_SCANNER_RAPID_API_BASE_URL"`
+	SkyScannerRapidAPIHost    string   `mapstructure:"SKY_SCANNER_RAPID_API_HOST"`
+	SkyScannerRapidAPIKey     string   `mapstructure:"SKY_SCANNER_RAPID_API_KEY"`
 }
 
 func (c Config) Validate() error {
@@ -65,6 +68,18 @@ func (c Config) Validate() error {
 
 	if len(c.Port) == 0 {
 		return ErrMissingEnvironmentVariable("HTTP_PORT")
+	}
+
+	if len(c.SkyScannerRapidAPIBaseURL) == 0 {
+		return ErrMissingEnvironmentVariable("SKY_SCANNER_RAPID_API_BASE_URL")
+	}
+
+	if len(c.SkyScannerRapidAPIHost) == 0 {
+		return ErrMissingEnvironmentVariable("SKY_SCANNER_RAPID_API_HOST")
+	}
+
+	if len(c.SkyScannerRapidAPIKey) == 0 {
+		return ErrMissingEnvironmentVariable("SKY_SCANNER_RAPID_API_KEY")
 	}
 
 	return nil

@@ -122,8 +122,8 @@ func (it itinerary) buildInfo(agentsIdx map[string]string) flight.Info {
 	}
 
 	return flight.Info{
-		Duration: it.duration(),
 		Agent:    strings.TrimSuffix(b.String(), "-"),
+		Duration: it.duration(),
 	}
 }
 
@@ -207,7 +207,7 @@ func (c *Client) search(
 	)
 
 	if err != nil {
-		return searchResponse{}, fmt.Errorf("request to flight API failed: %w", err)
+		return searchResponse{}, fmt.Errorf("request to amadeus API failed: %w", err)
 	}
 
 	var payload searchResponse

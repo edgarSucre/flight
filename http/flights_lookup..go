@@ -62,11 +62,17 @@ func lookUpFlights(
 
 	wg.Add(len(providers))
 
-	for _, p := range providers {
+	for i, p := range providers {
 		go func() {
 			defer wg.Done()
 
+			t := time.Now()
+
+			log.Printf("sending request for provider # %v", i)
+
 			info, err := p.Search(ctx, params)
+
+			log.Printf("request for provider # %v took %s", i, time.Since(t))
 
 			if err != nil {
 				errCh <- err

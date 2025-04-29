@@ -16,6 +16,7 @@ import (
 	"github.com/edgarSucre/flight"
 	"github.com/edgarSucre/flight/amadeus"
 	"github.com/edgarSucre/flight/fapi"
+	"github.com/edgarSucre/flight/sky"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -25,6 +26,9 @@ func TestSearch(t *testing.T) {
 
 	amadeusApiErr := make(chan error, 2)
 	amadeusApiProvider := amadeusAPI(t, amadeusApiErr)
+
+	skyAPiErr := make(chan error, 2)
+	skyApiProvider := skyAPI(t, skyAPiErr)
 
 	validCtx := context.Background()
 	validCtx = context.WithValue(validCtx, flight.UserCtxKey, "username")
@@ -88,8 +92,9 @@ func TestSearch(t *testing.T) {
 			"successWithFlightApi",
 			newSerchRequest(t, validCtx, "JFK", "SFO", "2030-10-02"),
 			func() {
-				// make amadeus fail so cheaper comes from flight api
+				// make amadeus and sky fail so cheaper comes from flight api
 				amadeusApiErr <- fmt.Errorf("amadeus failed")
+				skyAPiErr <- fmt.Errorf("sky failed")
 			},
 			func(t *testing.T, response *http.Response) {
 				assert.Equal(t, response.StatusCode, http.StatusOK)
@@ -121,8 +126,9 @@ func TestSearch(t *testing.T) {
 			"successWithAmadeusApi",
 			newSerchRequest(t, validCtx, "JFK", "SFO", "2030-10-02"),
 			func() {
-				// make flight api fail so cheaper comes from amadeus
+				// make flight api and sky fail so cheaper comes from amadeus
 				flightApiErr <- fmt.Errorf("flight api failed")
+				skyAPiErr <- fmt.Errorf("sky failed")
 			},
 			func(t *testing.T, response *http.Response) {
 				assert.Equal(t, response.StatusCode, http.StatusOK)
@@ -151,6 +157,40 @@ func TestSearch(t *testing.T) {
 			},
 		},
 		{
+			"successWithSkyApi",
+			newSerchRequest(t, validCtx, "JFK", "SFO", "2030-10-02"),
+			func() {
+				// make flight api and amadeus fail so cheaper comes from amadeus
+				flightApiErr <- fmt.Errorf("flight api failed")
+				amadeusApiErr <- fmt.Errorf("sky failed")
+			},
+			func(t *testing.T, response *http.Response) {
+				assert.Equal(t, response.StatusCode, http.StatusOK)
+
+				decoder := json.NewDecoder(response.Body)
+
+				var payload lookUpResponse
+
+				err := decoder.Decode(&payload)
+				assert.NoError(t, err)
+
+				cheapest := flightInfo{
+					Agent:    "Alaska Airlines",
+					Duration: "6h10m0s",
+					Price:    133.9,
+				}
+
+				fastest := flightInfo{
+					Agent:    "Hawaiian Airlines",
+					Duration: "6h0m0s",
+					Price:    149.3,
+				}
+
+				assert.Equal(t, cheapest, payload.Cheapest)
+				assert.Equal(t, fastest, payload.Fastest)
+			},
+		},
+		{
 			"comparison",
 			newSerchRequest(t, validCtx, "JFK", "SFO", "2030-10-02"),
 			nil, // all providers will submit their results
@@ -171,9 +211,9 @@ func TestSearch(t *testing.T) {
 				}
 
 				fastest := flightInfo{
-					Agent:    "BudgetAir",
-					Duration: "6h10m0s",
-					Price:    98.97,
+					Agent:    "Hawaiian Airlines",
+					Duration: "6h0m0s",
+					Price:    149.3,
 				}
 
 				assert.Equal(t, cheapest, payload.Cheapest)
@@ -187,6 +227,7 @@ func TestSearch(t *testing.T) {
 				// make all fail
 				flightApiErr <- fmt.Errorf("flight api failed")
 				amadeusApiErr <- fmt.Errorf("amadeus api failed")
+				skyAPiErr <- fmt.Errorf("sky api failed")
 			},
 			func(t *testing.T, response *http.Response) {
 				assert.Equal(t, response.StatusCode, http.StatusInternalServerError)
@@ -202,7 +243,11 @@ func TestSearch(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			rec := httptest.NewRecorder()
 
-			handler := handleSearch([]flight.Provider{flightApiProvider, amadeusApiProvider})
+			handler := handleSearch([]flight.Provider{
+				flightApiProvider,
+				amadeusApiProvider,
+				skyApiProvider,
+			})
 
 			if tt.stub != nil {
 				tt.stub()
@@ -241,6 +286,20 @@ func amadeusAPI(
 	}
 
 	return amadeus.NewClient("key", "secret", "url", r)
+}
+
+func skyAPI(
+	t *testing.T,
+	err chan error,
+) flight.Provider {
+	t.Helper()
+
+	r := requester{
+		err:  err,
+		path: "sky_scanner_mock_response.json",
+	}
+
+	return sky.NewClient("key", "host", "baseUrl", r)
 }
 
 type requester struct {

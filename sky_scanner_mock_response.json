@@ -1,0 +1,1209 @@
+{
+  "data": {
+    "context": {
+      "status": "incomplete",
+      "sessionId": "KLUv_SCN3QMA0sgdHsDru68KTFVF-gCRUgrabfNSkkgpk0yRVAeCikXfK40TIK521_YSSh1Z_k-m8z07aRu7Xvwt86NpopQCMPzKKswiYLM_7fNbF4kjtZSfu-d315m6iy7dJ0dANJ8OJYX_4mPvphzrfX6pXq7TNWxpJgMzPAUgQEMA",
+      "totalResults": 10
+    },
+    "itineraries": [
+      {
+        "id": "12712-2510020930--32593-0-16216-2510021240",
+        "price": {
+          "raw": 133.9,
+          "formatted": "$134",
+          "pricingOptionId": "OmpR2SDmT3e_"
+        },
+        "legs": [
+          {
+            "id": "12712-2510020930--32593-0-16216-2510021240",
+            "origin": {
+              "id": "JFK",
+              "entityId": "95565058",
+              "name": "New York John F. Kennedy",
+              "displayCode": "JFK",
+              "city": "New York",
+              "country": "United States",
+              "isHighlighted": false
+            },
+            "destination": {
+              "id": "SFO",
+              "entityId": "95673577",
+              "name": "San Francisco International",
+              "displayCode": "SFO",
+              "city": "San Francisco",
+              "country": "United States",
+              "isHighlighted": false
+            },
+            "durationInMinutes": 370,
+            "stopCount": 0,
+            "isSmallestStops": false,
+            "departure": "2025-10-02T09:30:00",
+            "arrival": "2025-10-02T12:40:00",
+            "timeDeltaInDays": 0,
+            "carriers": {
+              "marketing": [
+                {
+                  "id": -32593,
+                  "alternateId": "AS",
+                  "logoUrl": "https://logos.skyscnr.com/images/airlines/favicon/AS.png",
+                  "name": "Alaska Airlines"
+                }
+              ],
+              "operationType": "fully_operated"
+            },
+            "segments": [
+              {
+                "id": "12712-16216-2510020930-2510021240--32593",
+                "origin": {
+                  "flightPlaceId": "JFK",
+                  "displayCode": "JFK",
+                  "parent": {
+                    "flightPlaceId": "NYCA",
+                    "displayCode": "NYC",
+                    "name": "New York",
+                    "type": "City"
+                  },
+                  "name": "New York John F. Kennedy",
+                  "type": "Airport",
+                  "country": "United States"
+                },
+                "destination": {
+                  "flightPlaceId": "SFO",
+                  "displayCode": "SFO",
+                  "parent": {
+                    "flightPlaceId": "SFOA",
+                    "displayCode": "SFO",
+                    "name": "San Francisco",
+                    "type": "City"
+                  },
+                  "name": "San Francisco International",
+                  "type": "Airport",
+                  "country": "United States"
+                },
+                "departure": "2025-10-02T09:30:00",
+                "arrival": "2025-10-02T12:40:00",
+                "durationInMinutes": 370,
+                "flightNumber": "227",
+                "marketingCarrier": {
+                  "id": -32593,
+                  "name": "Alaska Airlines",
+                  "alternateId": "AS",
+                  "allianceId": 0,
+                  "displayCode": ""
+                },
+                "operatingCarrier": {
+                  "id": -32593,
+                  "name": "Alaska Airlines",
+                  "alternateId": "AS",
+                  "allianceId": 0,
+                  "displayCode": ""
+                }
+              }
+            ]
+          }
+        ],
+        "isSelfTransfer": false,
+        "isProtectedSelfTransfer": false,
+        "farePolicy": {
+          "isChangeAllowed": false,
+          "isPartiallyChangeable": false,
+          "isCancellationAllowed": false,
+          "isPartiallyRefundable": false
+        },
+        "fareAttributes": {},
+        "tags": [
+          "cheapest",
+          "shortest"
+        ],
+        "isMashUp": false,
+        "hasFlexibleOptions": false,
+        "score": 0.999
+      },
+      {
+        "id": "12712-2510021130--32385-0-16216-2510021512",
+        "price": {
+          "raw": 228.48,
+          "formatted": "$229",
+          "pricingOptionId": "Sy_zzFa8tlPx"
+        },
+        "legs": [
+          {
+            "id": "12712-2510021130--32385-0-16216-2510021512",
+            "origin": {
+              "id": "JFK",
+              "entityId": "95565058",
+              "name": "New York John F. Kennedy",
+              "displayCode": "JFK",
+              "city": "New York",
+              "country": "United States",
+              "isHighlighted": false
+            },
+            "destination": {
+              "id": "SFO",
+              "entityId": "95673577",
+              "name": "San Francisco International",
+              "displayCode": "SFO",
+              "city": "San Francisco",
+              "country": "United States",
+              "isHighlighted": false
+            },
+            "durationInMinutes": 402,
+            "stopCount": 0,
+            "isSmallestStops": false,
+            "departure": "2025-10-02T11:30:00",
+            "arrival": "2025-10-02T15:12:00",
+            "timeDeltaInDays": 0,
+            "carriers": {
+              "marketing": [
+                {
+                  "id": -32385,
+                  "alternateId": "DL",
+                  "logoUrl": "https://logos.skyscnr.com/images/airlines/favicon/DL.png",
+                  "name": "Delta"
+                }
+              ],
+              "operationType": "fully_operated"
+            },
+            "segments": [
+              {
+                "id": "12712-16216-2510021130-2510021512--32385",
+                "origin": {
+                  "flightPlaceId": "JFK",
+                  "displayCode": "JFK",
+                  "parent": {
+                    "flightPlaceId": "NYCA",
+                    "displayCode": "NYC",
+                    "name": "New York",
+                    "type": "City"
+                  },
+                  "name": "New York John F. Kennedy",
+                  "type": "Airport",
+                  "country": "United States"
+                },
+                "destination": {
+                  "flightPlaceId": "SFO",
+                  "displayCode": "SFO",
+                  "parent": {
+                    "flightPlaceId": "SFOA",
+                    "displayCode": "SFO",
+                    "name": "San Francisco",
+                    "type": "City"
+                  },
+                  "name": "San Francisco International",
+                  "type": "Airport",
+                  "country": "United States"
+                },
+                "departure": "2025-10-02T11:30:00",
+                "arrival": "2025-10-02T15:12:00",
+                "durationInMinutes": 402,
+                "flightNumber": "680",
+                "marketingCarrier": {
+                  "id": -32385,
+                  "name": "Delta",
+                  "alternateId": "DL",
+                  "allianceId": 0,
+                  "displayCode": ""
+                },
+                "operatingCarrier": {
+                  "id": -32385,
+                  "name": "Delta",
+                  "alternateId": "DL",
+                  "allianceId": 0,
+                  "displayCode": ""
+                }
+              }
+            ]
+          }
+        ],
+        "isSelfTransfer": false,
+        "isProtectedSelfTransfer": false,
+        "farePolicy": {
+          "isChangeAllowed": false,
+          "isPartiallyChangeable": false,
+          "isCancellationAllowed": false,
+          "isPartiallyRefundable": false
+        },
+        "fareAttributes": {},
+        "isMashUp": false,
+        "hasFlexibleOptions": false,
+        "score": 0.722287
+      },
+      {
+        "id": "12712-2510022029--32593-0-16216-2510022344",
+        "price": {
+          "raw": 133.9,
+          "formatted": "$134",
+          "pricingOptionId": "Wg7hDjZbr_dK"
+        },
+        "legs": [
+          {
+            "id": "12712-2510022029--32593-0-16216-2510022344",
+            "origin": {
+              "id": "JFK",
+              "entityId": "95565058",
+              "name": "New York John F. Kennedy",
+              "displayCode": "JFK",
+              "city": "New York",
+              "country": "United States",
+              "isHighlighted": false
+            },
+            "destination": {
+              "id": "SFO",
+              "entityId": "95673577",
+              "name": "San Francisco International",
+              "displayCode": "SFO",
+              "city": "San Francisco",
+              "country": "United States",
+              "isHighlighted": false
+            },
+            "durationInMinutes": 375,
+            "stopCount": 0,
+            "isSmallestStops": false,
+            "departure": "2025-10-02T20:29:00",
+            "arrival": "2025-10-02T23:44:00",
+            "timeDeltaInDays": 0,
+            "carriers": {
+              "marketing": [
+                {
+                  "id": -32593,
+                  "alternateId": "AS",
+                  "logoUrl": "https://logos.skyscnr.com/images/airlines/favicon/AS.png",
+                  "name": "Alaska Airlines"
+                }
+              ],
+              "operationType": "fully_operated"
+            },
+            "segments": [
+              {
+                "id": "12712-16216-2510022029-2510022344--32593",
+                "origin": {
+                  "flightPlaceId": "JFK",
+                  "displayCode": "JFK",
+                  "parent": {
+                    "flightPlaceId": "NYCA",
+                    "displayCode": "NYC",
+                    "name": "New York",
+                    "type": "City"
+                  },
+                  "name": "New York John F. Kennedy",
+                  "type": "Airport",
+                  "country": "United States"
+                },
+                "destination": {
+                  "flightPlaceId": "SFO",
+                  "displayCode": "SFO",
+                  "parent": {
+                    "flightPlaceId": "SFOA",
+                    "displayCode": "SFO",
+                    "name": "San Francisco",
+                    "type": "City"
+                  },
+                  "name": "San Francisco International",
+                  "type": "Airport",
+                  "country": "United States"
+                },
+                "departure": "2025-10-02T20:29:00",
+                "arrival": "2025-10-02T23:44:00",
+                "durationInMinutes": 375,
+                "flightNumber": "41",
+                "marketingCarrier": {
+                  "id": -32593,
+                  "name": "Alaska Airlines",
+                  "alternateId": "AS",
+                  "allianceId": 0,
+                  "displayCode": ""
+                },
+                "operatingCarrier": {
+                  "id": -32593,
+                  "name": "Alaska Airlines",
+                  "alternateId": "AS",
+                  "allianceId": 0,
+                  "displayCode": ""
+                }
+              }
+            ]
+          }
+        ],
+        "isSelfTransfer": false,
+        "isProtectedSelfTransfer": false,
+        "farePolicy": {
+          "isChangeAllowed": false,
+          "isPartiallyChangeable": false,
+          "isCancellationAllowed": false,
+          "isPartiallyRefundable": false
+        },
+        "fareAttributes": {},
+        "tags": [
+          "second_cheapest",
+          "third_shortest"
+        ],
+        "isMashUp": false,
+        "hasFlexibleOptions": false,
+        "score": 0.629908
+      },
+      {
+        "id": "12712-2510021650--32573-0-16216-2510022015",
+        "price": {
+          "raw": 278.48,
+          "formatted": "$279",
+          "pricingOptionId": "FNVDf77RiN-J"
+        },
+        "legs": [
+          {
+            "id": "12712-2510021650--32573-0-16216-2510022015",
+            "origin": {
+              "id": "JFK",
+              "entityId": "95565058",
+              "name": "New York John F. Kennedy",
+              "displayCode": "JFK",
+              "city": "New York",
+              "country": "United States",
+              "isHighlighted": false
+            },
+            "destination": {
+              "id": "SFO",
+              "entityId": "95673577",
+              "name": "San Francisco International",
+              "displayCode": "SFO",
+              "city": "San Francisco",
+              "country": "United States",
+              "isHighlighted": false
+            },
+            "durationInMinutes": 385,
+            "stopCount": 0,
+            "isSmallestStops": false,
+            "departure": "2025-10-02T16:50:00",
+            "arrival": "2025-10-02T20:15:00",
+            "timeDeltaInDays": 0,
+            "carriers": {
+              "marketing": [
+                {
+                  "id": -32573,
+                  "alternateId": "AA",
+                  "logoUrl": "https://logos.skyscnr.com/images/airlines/favicon/AA.png",
+                  "name": "American Airlines"
+                }
+              ],
+              "operationType": "fully_operated"
+            },
+            "segments": [
+              {
+                "id": "12712-16216-2510021650-2510022015--32573",
+                "origin": {
+                  "flightPlaceId": "JFK",
+                  "displayCode": "JFK",
+                  "parent": {
+                    "flightPlaceId": "NYCA",
+                    "displayCode": "NYC",
+                    "name": "New York",
+                    "type": "City"
+                  },
+                  "name": "New York John F. Kennedy",
+                  "type": "Airport",
+                  "country": "United States"
+                },
+                "destination": {
+                  "flightPlaceId": "SFO",
+                  "displayCode": "SFO",
+                  "parent": {
+                    "flightPlaceId": "SFOA",
+                    "displayCode": "SFO",
+                    "name": "San Francisco",
+                    "type": "City"
+                  },
+                  "name": "San Francisco International",
+                  "type": "Airport",
+                  "country": "United States"
+                },
+                "departure": "2025-10-02T16:50:00",
+                "arrival": "2025-10-02T20:15:00",
+                "durationInMinutes": 385,
+                "flightNumber": "15",
+                "marketingCarrier": {
+                  "id": -32573,
+                  "name": "American Airlines",
+                  "alternateId": "AA",
+                  "allianceId": 0,
+                  "displayCode": ""
+                },
+                "operatingCarrier": {
+                  "id": -32573,
+                  "name": "American Airlines",
+                  "alternateId": "AA",
+                  "allianceId": 0,
+                  "displayCode": ""
+                }
+              }
+            ]
+          }
+        ],
+        "isSelfTransfer": false,
+        "isProtectedSelfTransfer": false,
+        "farePolicy": {
+          "isChangeAllowed": false,
+          "isPartiallyChangeable": false,
+          "isCancellationAllowed": false,
+          "isPartiallyRefundable": false
+        },
+        "fareAttributes": {},
+        "isMashUp": false,
+        "hasFlexibleOptions": false,
+        "score": 0.409031
+      },
+      {
+        "id": "12712-2510020930--32249-0-16216-2510021240",
+        "price": {
+          "raw": 149.3,
+          "formatted": "$150",
+          "pricingOptionId": "zgMBUhD1NFa_"
+        },
+        "legs": [
+          {
+            "id": "12712-2510020930--32249-0-16216-2510021240",
+            "origin": {
+              "id": "JFK",
+              "entityId": "95565058",
+              "name": "New York John F. Kennedy",
+              "displayCode": "JFK",
+              "city": "New York",
+              "country": "United States",
+              "isHighlighted": false
+            },
+            "destination": {
+              "id": "SFO",
+              "entityId": "95673577",
+              "name": "San Francisco International",
+              "displayCode": "SFO",
+              "city": "San Francisco",
+              "country": "United States",
+              "isHighlighted": false
+            },
+            "durationInMinutes": 360,
+            "stopCount": 0,
+            "isSmallestStops": false,
+            "departure": "2025-10-02T09:30:00",
+            "arrival": "2025-10-02T12:40:00",
+            "timeDeltaInDays": 0,
+            "carriers": {
+              "marketing": [
+                {
+                  "id": -32249,
+                  "alternateId": "HA",
+                  "logoUrl": "https://logos.skyscnr.com/images/airlines/favicon/HA.png",
+                  "name": "Hawaiian Airlines"
+                }
+              ],
+              "operating": [
+                {
+                  "id": -32593,
+                  "alternateId": "AS",
+                  "logoUrl": "https://logos.skyscnr.com/images/airlines/favicon/AS.png",
+                  "name": "Alaska Airlines"
+                }
+              ],
+              "operationType": "not_operated"
+            },
+            "segments": [
+              {
+                "id": "12712-16216-2510020930-2510021240--32249",
+                "origin": {
+                  "flightPlaceId": "JFK",
+                  "displayCode": "JFK",
+                  "parent": {
+                    "flightPlaceId": "NYCA",
+                    "displayCode": "NYC",
+                    "name": "New York",
+                    "type": "City"
+                  },
+                  "name": "New York John F. Kennedy",
+                  "type": "Airport",
+                  "country": "United States"
+                },
+                "destination": {
+                  "flightPlaceId": "SFO",
+                  "displayCode": "SFO",
+                  "parent": {
+                    "flightPlaceId": "SFOA",
+                    "displayCode": "SFO",
+                    "name": "San Francisco",
+                    "type": "City"
+                  },
+                  "name": "San Francisco International",
+                  "type": "Airport",
+                  "country": "United States"
+                },
+                "departure": "2025-10-02T09:30:00",
+                "arrival": "2025-10-02T12:40:00",
+                "durationInMinutes": 370,
+                "flightNumber": "4845",
+                "marketingCarrier": {
+                  "id": -32249,
+                  "name": "Hawaiian Airlines",
+                  "alternateId": "HA",
+                  "allianceId": 0,
+                  "displayCode": ""
+                },
+                "operatingCarrier": {
+                  "id": -32593,
+                  "name": "Alaska Airlines",
+                  "alternateId": "AS",
+                  "allianceId": 0,
+                  "displayCode": ""
+                }
+              }
+            ]
+          }
+        ],
+        "isSelfTransfer": false,
+        "isProtectedSelfTransfer": false,
+        "farePolicy": {
+          "isChangeAllowed": false,
+          "isPartiallyChangeable": false,
+          "isCancellationAllowed": false,
+          "isPartiallyRefundable": false
+        },
+        "fareAttributes": {},
+        "tags": [
+          "second_shortest"
+        ],
+        "isMashUp": false,
+        "hasFlexibleOptions": false,
+        "score": 0.401451
+      },
+      {
+        "id": "12712-2510022130--32385-0-16216-2510030118",
+        "price": {
+          "raw": 368.48,
+          "formatted": "$369",
+          "pricingOptionId": "_WPn_bRpB4ZJ"
+        },
+        "legs": [
+          {
+            "id": "12712-2510022130--32385-0-16216-2510030118",
+            "origin": {
+              "id": "JFK",
+              "entityId": "95565058",
+              "name": "New York John F. Kennedy",
+              "displayCode": "JFK",
+              "city": "New York",
+              "country": "United States",
+              "isHighlighted": false
+            },
+            "destination": {
+              "id": "SFO",
+              "entityId": "95673577",
+              "name": "San Francisco International",
+              "displayCode": "SFO",
+              "city": "San Francisco",
+              "country": "United States",
+              "isHighlighted": false
+            },
+            "durationInMinutes": 408,
+            "stopCount": 0,
+            "isSmallestStops": false,
+            "departure": "2025-10-02T21:30:00",
+            "arrival": "2025-10-03T01:18:00",
+            "timeDeltaInDays": 1,
+            "carriers": {
+              "marketing": [
+                {
+                  "id": -32385,
+                  "alternateId": "DL",
+                  "logoUrl": "https://logos.skyscnr.com/images/airlines/favicon/DL.png",
+                  "name": "Delta"
+                }
+              ],
+              "operationType": "fully_operated"
+            },
+            "segments": [
+              {
+                "id": "12712-16216-2510022130-2510030118--32385",
+                "origin": {
+                  "flightPlaceId": "JFK",
+                  "displayCode": "JFK",
+                  "parent": {
+                    "flightPlaceId": "NYCA",
+                    "displayCode": "NYC",
+                    "name": "New York",
+                    "type": "City"
+                  },
+                  "name": "New York John F. Kennedy",
+                  "type": "Airport",
+                  "country": "United States"
+                },
+                "destination": {
+                  "flightPlaceId": "SFO",
+                  "displayCode": "SFO",
+                  "parent": {
+                    "flightPlaceId": "SFOA",
+                    "displayCode": "SFO",
+                    "name": "San Francisco",
+                    "type": "City"
+                  },
+                  "name": "San Francisco International",
+                  "type": "Airport",
+                  "country": "United States"
+                },
+                "departure": "2025-10-02T21:30:00",
+                "arrival": "2025-10-03T01:18:00",
+                "durationInMinutes": 408,
+                "flightNumber": "1732",
+                "marketingCarrier": {
+                  "id": -32385,
+                  "name": "Delta",
+                  "alternateId": "DL",
+                  "allianceId": 0,
+                  "displayCode": ""
+                },
+                "operatingCarrier": {
+                  "id": -32385,
+                  "name": "Delta",
+                  "alternateId": "DL",
+                  "allianceId": 0,
+                  "displayCode": ""
+                }
+              }
+            ]
+          }
+        ],
+        "isSelfTransfer": false,
+        "isProtectedSelfTransfer": false,
+        "farePolicy": {
+          "isChangeAllowed": false,
+          "isPartiallyChangeable": false,
+          "isCancellationAllowed": false,
+          "isPartiallyRefundable": false
+        },
+        "fareAttributes": {},
+        "isMashUp": false,
+        "hasFlexibleOptions": false,
+        "score": 0.395973
+      },
+      {
+        "id": "12712-2510021920--32385-0-16216-2510022320",
+        "price": {
+          "raw": 368.48,
+          "formatted": "$369",
+          "pricingOptionId": "1TF8LYwx_vTb"
+        },
+        "legs": [
+          {
+            "id": "12712-2510021920--32385-0-16216-2510022320",
+            "origin": {
+              "id": "JFK",
+              "entityId": "95565058",
+              "name": "New York John F. Kennedy",
+              "displayCode": "JFK",
+              "city": "New York",
+              "country": "United States",
+              "isHighlighted": false
+            },
+            "destination": {
+              "id": "SFO",
+              "entityId": "95673577",
+              "name": "San Francisco International",
+              "displayCode": "SFO",
+              "city": "San Francisco",
+              "country": "United States",
+              "isHighlighted": false
+            },
+            "durationInMinutes": 420,
+            "stopCount": 0,
+            "isSmallestStops": false,
+            "departure": "2025-10-02T19:20:00",
+            "arrival": "2025-10-02T23:20:00",
+            "timeDeltaInDays": 0,
+            "carriers": {
+              "marketing": [
+                {
+                  "id": -32385,
+                  "alternateId": "DL",
+                  "logoUrl": "https://logos.skyscnr.com/images/airlines/favicon/DL.png",
+                  "name": "Delta"
+                }
+              ],
+              "operationType": "fully_operated"
+            },
+            "segments": [
+              {
+                "id": "12712-16216-2510021920-2510022320--32385",
+                "origin": {
+                  "flightPlaceId": "JFK",
+                  "displayCode": "JFK",
+                  "parent": {
+                    "flightPlaceId": "NYCA",
+                    "displayCode": "NYC",
+                    "name": "New York",
+                    "type": "City"
+                  },
+                  "name": "New York John F. Kennedy",
+                  "type": "Airport",
+                  "country": "United States"
+                },
+                "destination": {
+                  "flightPlaceId": "SFO",
+                  "displayCode": "SFO",
+                  "parent": {
+                    "flightPlaceId": "SFOA",
+                    "displayCode": "SFO",
+                    "name": "San Francisco",
+                    "type": "City"
+                  },
+                  "name": "San Francisco International",
+                  "type": "Airport",
+                  "country": "United States"
+                },
+                "departure": "2025-10-02T19:20:00",
+                "arrival": "2025-10-02T23:20:00",
+                "durationInMinutes": 420,
+                "flightNumber": "667",
+                "marketingCarrier": {
+                  "id": -32385,
+                  "name": "Delta",
+                  "alternateId": "DL",
+                  "allianceId": 0,
+                  "displayCode": ""
+                },
+                "operatingCarrier": {
+                  "id": -32385,
+                  "name": "Delta",
+                  "alternateId": "DL",
+                  "allianceId": 0,
+                  "displayCode": ""
+                }
+              }
+            ]
+          }
+        ],
+        "isSelfTransfer": false,
+        "isProtectedSelfTransfer": false,
+        "farePolicy": {
+          "isChangeAllowed": false,
+          "isPartiallyChangeable": false,
+          "isCancellationAllowed": false,
+          "isPartiallyRefundable": false
+        },
+        "eco": {
+          "ecoContenderDelta": 17.229635
+        },
+        "fareAttributes": {},
+        "isMashUp": false,
+        "hasFlexibleOptions": false,
+        "score": 0.382879
+      },
+      {
+        "id": "12712-2510020829--32573-0-16216-2510021208",
+        "price": {
+          "raw": 148.48,
+          "formatted": "$149",
+          "pricingOptionId": "hiZ75c833eIa"
+        },
+        "legs": [
+          {
+            "id": "12712-2510020829--32573-0-16216-2510021208",
+            "origin": {
+              "id": "JFK",
+              "entityId": "95565058",
+              "name": "New York John F. Kennedy",
+              "displayCode": "JFK",
+              "city": "New York",
+              "country": "United States",
+              "isHighlighted": false
+            },
+            "destination": {
+              "id": "SFO",
+              "entityId": "95673577",
+              "name": "San Francisco International",
+              "displayCode": "SFO",
+              "city": "San Francisco",
+              "country": "United States",
+              "isHighlighted": false
+            },
+            "durationInMinutes": 399,
+            "stopCount": 0,
+            "isSmallestStops": false,
+            "departure": "2025-10-02T08:29:00",
+            "arrival": "2025-10-02T12:08:00",
+            "timeDeltaInDays": 0,
+            "carriers": {
+              "marketing": [
+                {
+                  "id": -32573,
+                  "alternateId": "AA",
+                  "logoUrl": "https://logos.skyscnr.com/images/airlines/favicon/AA.png",
+                  "name": "American Airlines"
+                }
+              ],
+              "operationType": "fully_operated"
+            },
+            "segments": [
+              {
+                "id": "12712-16216-2510020829-2510021208--32573",
+                "origin": {
+                  "flightPlaceId": "JFK",
+                  "displayCode": "JFK",
+                  "parent": {
+                    "flightPlaceId": "NYCA",
+                    "displayCode": "NYC",
+                    "name": "New York",
+                    "type": "City"
+                  },
+                  "name": "New York John F. Kennedy",
+                  "type": "Airport",
+                  "country": "United States"
+                },
+                "destination": {
+                  "flightPlaceId": "SFO",
+                  "displayCode": "SFO",
+                  "parent": {
+                    "flightPlaceId": "SFOA",
+                    "displayCode": "SFO",
+                    "name": "San Francisco",
+                    "type": "City"
+                  },
+                  "name": "San Francisco International",
+                  "type": "Airport",
+                  "country": "United States"
+                },
+                "departure": "2025-10-02T08:29:00",
+                "arrival": "2025-10-02T12:08:00",
+                "durationInMinutes": 399,
+                "flightNumber": "179",
+                "marketingCarrier": {
+                  "id": -32573,
+                  "name": "American Airlines",
+                  "alternateId": "AA",
+                  "allianceId": 0,
+                  "displayCode": ""
+                },
+                "operatingCarrier": {
+                  "id": -32573,
+                  "name": "American Airlines",
+                  "alternateId": "AA",
+                  "allianceId": 0,
+                  "displayCode": ""
+                }
+              }
+            ]
+          }
+        ],
+        "isSelfTransfer": false,
+        "isProtectedSelfTransfer": false,
+        "farePolicy": {
+          "isChangeAllowed": false,
+          "isPartiallyChangeable": false,
+          "isCancellationAllowed": false,
+          "isPartiallyRefundable": false
+        },
+        "fareAttributes": {},
+        "tags": [
+          "third_cheapest"
+        ],
+        "isMashUp": false,
+        "hasFlexibleOptions": false,
+        "score": 0.382645
+      },
+      {
+        "id": "12712-2510020845--32171-0-16216-2510021207",
+        "price": {
+          "raw": 228.48,
+          "formatted": "$229",
+          "pricingOptionId": "gQifdifRdZ24"
+        },
+        "legs": [
+          {
+            "id": "12712-2510020845--32171-0-16216-2510021207",
+            "origin": {
+              "id": "JFK",
+              "entityId": "95565058",
+              "name": "New York John F. Kennedy",
+              "displayCode": "JFK",
+              "city": "New York",
+              "country": "United States",
+              "isHighlighted": false
+            },
+            "destination": {
+              "id": "SFO",
+              "entityId": "95673577",
+              "name": "San Francisco International",
+              "displayCode": "SFO",
+              "city": "San Francisco",
+              "country": "United States",
+              "isHighlighted": false
+            },
+            "durationInMinutes": 382,
+            "stopCount": 0,
+            "isSmallestStops": false,
+            "departure": "2025-10-02T08:45:00",
+            "arrival": "2025-10-02T12:07:00",
+            "timeDeltaInDays": 0,
+            "carriers": {
+              "marketing": [
+                {
+                  "id": -32171,
+                  "alternateId": "B6",
+                  "logoUrl": "https://logos.skyscnr.com/images/airlines/favicon/B6.png",
+                  "name": "jetBlue"
+                }
+              ],
+              "operationType": "fully_operated"
+            },
+            "segments": [
+              {
+                "id": "12712-16216-2510020845-2510021207--32171",
+                "origin": {
+                  "flightPlaceId": "JFK",
+                  "displayCode": "JFK",
+                  "parent": {
+                    "flightPlaceId": "NYCA",
+                    "displayCode": "NYC",
+                    "name": "New York",
+                    "type": "City"
+                  },
+                  "name": "New York John F. Kennedy",
+                  "type": "Airport",
+                  "country": "United States"
+                },
+                "destination": {
+                  "flightPlaceId": "SFO",
+                  "displayCode": "SFO",
+                  "parent": {
+                    "flightPlaceId": "SFOA",
+                    "displayCode": "SFO",
+                    "name": "San Francisco",
+                    "type": "City"
+                  },
+                  "name": "San Francisco International",
+                  "type": "Airport",
+                  "country": "United States"
+                },
+                "departure": "2025-10-02T08:45:00",
+                "arrival": "2025-10-02T12:07:00",
+                "durationInMinutes": 382,
+                "flightNumber": "215",
+                "marketingCarrier": {
+                  "id": -32171,
+                  "name": "jetBlue",
+                  "alternateId": "B6",
+                  "allianceId": 0,
+                  "displayCode": ""
+                },
+                "operatingCarrier": {
+                  "id": -32171,
+                  "name": "jetBlue",
+                  "alternateId": "B6",
+                  "allianceId": 0,
+                  "displayCode": ""
+                }
+              }
+            ]
+          }
+        ],
+        "isSelfTransfer": false,
+        "isProtectedSelfTransfer": false,
+        "farePolicy": {
+          "isChangeAllowed": false,
+          "isPartiallyChangeable": false,
+          "isCancellationAllowed": false,
+          "isPartiallyRefundable": false
+        },
+        "fareAttributes": {},
+        "isMashUp": false,
+        "hasFlexibleOptions": false,
+        "score": 0.37576
+      },
+      {
+        "id": "12712-2510020900--32385-0-16216-2510021245",
+        "price": {
+          "raw": 228.48,
+          "formatted": "$229",
+          "pricingOptionId": "J0DDiwHHoz6Z"
+        },
+        "legs": [
+          {
+            "id": "12712-2510020900--32385-0-16216-2510021245",
+            "origin": {
+              "id": "JFK",
+              "entityId": "95565058",
+              "name": "New York John F. Kennedy",
+              "displayCode": "JFK",
+              "city": "New York",
+              "country": "United States",
+              "isHighlighted": false
+            },
+            "destination": {
+              "id": "SFO",
+              "entityId": "95673577",
+              "name": "San Francisco International",
+              "displayCode": "SFO",
+              "city": "San Francisco",
+              "country": "United States",
+              "isHighlighted": false
+            },
+            "durationInMinutes": 405,
+            "stopCount": 0,
+            "isSmallestStops": false,
+            "departure": "2025-10-02T09:00:00",
+            "arrival": "2025-10-02T12:45:00",
+            "timeDeltaInDays": 0,
+            "carriers": {
+              "marketing": [
+                {
+                  "id": -32385,
+                  "alternateId": "DL",
+                  "logoUrl": "https://logos.skyscnr.com/images/airlines/favicon/DL.png",
+                  "name": "Delta"
+                }
+              ],
+              "operationType": "fully_operated"
+            },
+            "segments": [
+              {
+                "id": "12712-16216-2510020900-2510021245--32385",
+                "origin": {
+                  "flightPlaceId": "JFK",
+                  "displayCode": "JFK",
+                  "parent": {
+                    "flightPlaceId": "NYCA",
+                    "displayCode": "NYC",
+                    "name": "New York",
+                    "type": "City"
+                  },
+                  "name": "New York John F. Kennedy",
+                  "type": "Airport",
+                  "country": "United States"
+                },
+                "destination": {
+                  "flightPlaceId": "SFO",
+                  "displayCode": "SFO",
+                  "parent": {
+                    "flightPlaceId": "SFOA",
+                    "displayCode": "SFO",
+                    "name": "San Francisco",
+                    "type": "City"
+                  },
+                  "name": "San Francisco International",
+                  "type": "Airport",
+                  "country": "United States"
+                },
+                "departure": "2025-10-02T09:00:00",
+                "arrival": "2025-10-02T12:45:00",
+                "durationInMinutes": 405,
+                "flightNumber": "352",
+                "marketingCarrier": {
+                  "id": -32385,
+                  "name": "Delta",
+                  "alternateId": "DL",
+                  "allianceId": 0,
+                  "displayCode": ""
+                },
+                "operatingCarrier": {
+                  "id": -32385,
+                  "name": "Delta",
+                  "alternateId": "DL",
+                  "allianceId": 0,
+                  "displayCode": ""
+                }
+              }
+            ]
+          }
+        ],
+        "isSelfTransfer": false,
+        "isProtectedSelfTransfer": false,
+        "farePolicy": {
+          "isChangeAllowed": false,
+          "isPartiallyChangeable": false,
+          "isCancellationAllowed": false,
+          "isPartiallyRefundable": false
+        },
+        "eco": {
+          "ecoContenderDelta": 17.229635
+        },
+        "fareAttributes": {},
+        "isMashUp": false,
+        "hasFlexibleOptions": false,
+        "score": 0.374556
+      }
+    ],
+    "messages": [],
+    "filterStats": {
+      "duration": {
+        "min": 370,
+        "max": 420,
+        "multiCityMin": 370,
+        "multiCityMax": 420
+      },
+      "airports": [
+        {
+          "city": "New York",
+          "airports": [
+            {
+              "id": "JFK",
+              "entityId": "95565058",
+              "name": "New York John F. Kennedy"
+            }
+          ]
+        },
+        {
+          "city": "San Francisco",
+          "airports": [
+            {
+              "id": "SFO",
+              "entityId": "95673577",
+              "name": "San Francisco International"
+            }
+          ]
+        }
+      ],
+      "carriers": [
+        {
+          "id": -32593,
+          "alternateId": "AS",
+          "logoUrl": "https://logos.skyscnr.com/images/airlines/favicon/AS.png",
+          "name": "Alaska Airlines"
+        },
+        {
+          "id": -32573,
+          "alternateId": "AA",
+          "logoUrl": "https://logos.skyscnr.com/images/airlines/favicon/AA.png",
+          "name": "American Airlines"
+        },
+        {
+          "id": -32385,
+          "alternateId": "DL",
+          "logoUrl": "https://logos.skyscnr.com/images/airlines/favicon/DL.png",
+          "name": "Delta"
+        },
+        {
+          "id": -32249,
+          "alternateId": "HA",
+          "logoUrl": "https://logos.skyscnr.com/images/airlines/favicon/HA.png",
+          "name": "Hawaiian Airlines"
+        },
+        {
+          "id": -32171,
+          "alternateId": "B6",
+          "logoUrl": "https://logos.skyscnr.com/images/airlines/favicon/B6.png",
+          "name": "jetBlue"
+        }
+      ],
+      "stopPrices": {
+        "direct": {
+          "isPresent": true,
+          "formattedPrice": "$134"
+        },
+        "one": {
+          "isPresent": false
+        },
+        "twoOrMore": {
+          "isPresent": false
+        }
+      }
+    },
+    "flightsSessionId": "af1613ac-ecf4-4ec7-b112-57546b962a20",
+    "destinationImageUrl": "https://content.skyscnr.com/m/3719e8f4a5daf43d/original/Flights-Placeholder.jpg",
+    "token": "eyJhIjoxLCJjIjowLCJpIjowLCJjYyI6ImVjb25vbXkiLCJvIjoiSkZLIiwiZCI6IlNGTyIsImQxIjoiMjAyNS0xMC0wMiJ9"
+  },
+  "status": true,
+  "message": "Successful"
+}

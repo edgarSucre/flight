@@ -15,6 +15,7 @@ import (
 	"github.com/edgarSucre/flight"
 	"github.com/edgarSucre/flight/amadeus"
 	"github.com/edgarSucre/flight/fapi"
+	"github.com/edgarSucre/flight/sky"
 
 	fHttp "github.com/edgarSucre/flight/http"
 	"github.com/edgarSucre/flight/token"
@@ -32,11 +33,17 @@ func run(ctx context.Context) error {
 	}
 
 	providers := []flight.Provider{
-		fapi.NewClient(config.FlightAPIKey, config.FlightAPIURL, fapi.Requester{}),
 		amadeus.NewClient(
 			config.AmadeusAPIKey,
 			config.AmadeusAPISecret,
 			config.AmadeusAPIBaseURL,
+			util.HttpRequester{},
+		),
+		fapi.NewClient(config.FlightAPIKey, config.FlightAPIURL, fapi.Requester{}),
+		sky.NewClient(
+			config.AmadeusAPIKey,
+			config.SkyScannerRapidAPIHost,
+			config.SkyScannerRapidAPIBaseURL,
 			util.HttpRequester{},
 		),
 	}
