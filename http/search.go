@@ -2,11 +2,14 @@ package http
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	"time"
 
 	"github.com/edgarSucre/flight"
 )
+
+var ErrInvalidDate = errors.New("invalid date, must be in YYYY-MM-DD format")
 
 const (
 	queryParamDeparture     = "origin"
@@ -17,23 +20,9 @@ const (
 func handleSearch(providers []flight.Provider) http.Handler {
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		queryParams := r.URL.Query()
-
-		departureDate, err := time.Parse(time.DateOnly, queryParams.Get(queryParamDepartureDate))
+		params, err := buildParams(r)
 		if err != nil {
-			http.Error(w, "invalid date, must be in YYYY-MM-DD format", http.StatusBadRequest)
-			return
-		}
-
-		params := flight.SearchParams{
-			ArrivalAirport:   queryParams.Get(queryParamArrival),
-			DepartureAirport: queryParams.Get(queryParamDeparture),
-			DepartureDate:    departureDate,
-		}
-
-		if err := params.Validate(); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
 		}
 
 		data, err := lookUpFlights(r.Context(), providers, params)
@@ -52,4 +41,21 @@ func handleSearch(providers []flight.Provider) http.Handler {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 	})
+}
+
+func buildParams(r *http.Request) (flight.SearchParams, error) {
+	queryParams := r.URL.Query()
+
+	departureDate, err := time.Parse(time.DateOnly, queryParams.Get(queryParamDepartureDate))
+	if err != nil {
+		return flight.SearchParams{}, ErrInvalidDate
+	}
+
+	params := flight.SearchParams{
+		ArrivalAirport:   queryParams.Get(queryParamArrival),
+		DepartureAirport: queryParams.Get(queryParamDeparture),
+		DepartureDate:    departureDate,
+	}
+
+	return params, params.Validate()
 }
