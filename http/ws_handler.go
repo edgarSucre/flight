@@ -1,6 +1,8 @@
 package http
 
 import (
+	"encoding/json"
+	"errors"
 	"log"
 	"net/http"
 	"time"
@@ -9,20 +11,31 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-var upgrader = websocket.Upgrader{}
+var upgrader = websocket.Upgrader{
+	CheckOrigin: func(r *http.Request) bool {
+		return true
+	},
+}
+
+type wsRequest struct {
+	Origin      string `json:"origin"`
+	Destination string `json:"destination"`
+	Date        string `json:"date"`
+}
 
 func handleWS(providers []flight.Provider) http.Handler {
-	conns := make(map[string]*websocket.Conn)
+	// conns := make(map[string]*websocket.Conn)
+	var ws *websocket.Conn
+
+	close := make(chan struct{})
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		ctx := r.Context()
-		user := ctx.Value(flight.UserCtxKey).(string)
-
-		if conn, ok := conns[user]; ok {
-			conn.Close()
+		if ws != nil {
+			ws.Close()
+			close <- struct{}{}
 		}
 
-		c, err := upgrader.Upgrade(w, r, nil)
+		ws, err := upgrader.Upgrade(w, r, nil)
 		if err != nil {
 			log.Println("upgrade fail", err)
 
@@ -30,34 +43,89 @@ func handleWS(providers []flight.Provider) http.Handler {
 			return
 		}
 
-		conns[user] = c
+		defer ws.Close()
 
-		defer c.Close()
+		req := make(chan flight.SearchParams)
 
-		ticker := time.Tick(time.Second * 30)
+		ticker := time.NewTicker(time.Second * 30)
+
+		go func() {
+			var params *flight.SearchParams
+
+			for {
+				select {
+				case p := <-req:
+					params = &p
+				case <-ticker.C:
+					if params != nil {
+						data, err := lookUpFlights(r.Context(), providers, *params)
+						if err != nil {
+							log.Println("could not fetch flights", err)
+							continue
+						}
+
+						response := buildResponse(data)
+
+						payload, err := json.Marshal(response)
+						if err != nil {
+							log.Println("could not encode flights", err)
+							continue
+						}
+
+						if err := ws.WriteMessage(1, payload); err != nil {
+							log.Println("could send websocket message", err)
+						}
+					}
+				case <-close:
+					log.Println("closing ws..")
+					return
+				}
+			}
+		}()
 
 		for {
-			<-ticker
-
-			params, err := buildParams(r)
+			messageType, message, err := ws.ReadMessage()
 			if err != nil {
-				msg := "could not read request params"
-				log.Println(msg, err)
+				log.Println("could not read from the socket:", err)
 
-				c.WriteMessage(1, []byte(msg))
+				closeError := new(websocket.CloseError)
 
+				if errors.As(err, &closeError) {
+					close <- struct{}{}
+					return
+				}
+
+				continue
+			}
+
+			if messageType == 8 {
+				close <- struct{}{}
 				break
 			}
 
-			data, err := lookUpFlights(r.Context(), providers, params)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
+			if messageType == 9 || string(message) == "ping" {
+				ws.WriteMessage(10, []byte("pong"))
 			}
 
-			resp := buildResponse(data)
-			if err := c.WriteJSON(resp); err != nil {
+			var payload wsRequest
 
+			if err := json.Unmarshal(message, &payload); err != nil {
+				log.Println("could not parse from the socket:", err)
+			}
+
+			departureDate, err := time.Parse(time.DateOnly, payload.Date)
+			if err != nil {
+				log.Println("could not parse from the socket:", err)
+			}
+
+			req <- flight.SearchParams{
+				ArrivalAirport:   payload.Destination,
+				Currency:         "USD",
+				DepartureAirport: payload.Origin,
+				DepartureDate:    departureDate,
+				NumAdults:        1,
+				NumChildren:      0,
+				NumInfants:       0,
 			}
 		}
 	})

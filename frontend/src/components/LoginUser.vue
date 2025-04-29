@@ -7,6 +7,7 @@ import Button from 'primevue/button'
 import { useToast } from 'primevue/usetoast'
 import { ref } from 'vue'
 import axios from 'axios'
+// import type { User } from '@/types/user'
 import store from '@/store'
 
 interface LoginResponse {
@@ -20,10 +21,20 @@ const toast = useToast()
 
 const handleLogin = async () => {
   try {
-    const response = await axios.post<LoginResponse>('/user/login', {
-      username: username.value,
-      password: password.value,
-    })
+    const response = await axios.post<LoginResponse>(
+      '/user/login',
+      {
+        username: username.value,
+        password: password.value,
+      },
+      // {
+      //   headers: {
+      //     'Content-Type': 'application/json',
+
+      //     Authorization: 'none',
+      //   },
+      // },
+    )
 
     store.setUser(response.data.access_token)
     toast.add({

@@ -27,7 +27,16 @@ func jwtMiddleware(next http.Handler, tokenMaker token.Maker) http.Handler {
 			return
 		}
 
-		auth := r.Header.Get(authHeader)
+		var auth string
+
+		if r.URL.Path == "/flights/search/ws" {
+			queryParams := r.URL.Query()
+
+			auth = fmt.Sprintf("%s %s", bearerPrefix, queryParams.Get(authHeader))
+		} else {
+			auth = r.Header.Get(authHeader)
+		}
+
 		if len(auth) == 0 {
 			err := fmt.Sprintf("missing %s header", authHeader)
 			http.Error(w, err, http.StatusUnauthorized)

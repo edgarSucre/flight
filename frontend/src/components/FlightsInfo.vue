@@ -13,6 +13,7 @@ import InputGroup from 'primevue/inputgroup'
 import InputText from 'primevue/inputtext'
 import DatePicker from 'primevue/datepicker'
 import { useToast } from 'primevue/usetoast'
+import { useWebSocket } from '@vueuse/core'
 
 const toast = useToast()
 
@@ -39,10 +40,33 @@ const origin = ref()
 const destination = ref()
 const date = ref()
 
-onMounted(() => {
-  console.info('props:')
-  console.log(props.token)
-})
+const socket = new WebSocket(`wss:///flights/search/ws?Authorization=${props.token}`)
+
+socket.onopen = (event) => {
+  console.log('WebSocket connection opened:', event)
+}
+
+socket.onmessage = async (event) => {
+  loading.value = true
+
+  setTimeout(() => {
+    loading.value = false
+  }, 1000)
+
+  const data = JSON.parse(event.data)
+
+  flights.value = data.comparison
+  cheapest.value = data.cheapest
+  fastest.value = data.fastest
+}
+
+socket.onerror = (error) => {
+  console.log('WebSocket error:', error)
+}
+
+socket.onclose = (event) => {
+  console.log('WebSocket connection closed!!!!:', event.code)
+}
 
 const formatDate = (dateValue: Date) => {
   const year = dateValue.getFullYear()
@@ -116,6 +140,14 @@ const onSearch = async () => {
     flights.value = response.data.comparison
     cheapest.value = response.data.cheapest
     fastest.value = response.data.fastest
+
+    const payload = {
+      date: d,
+      destination: destination.value,
+      origin: origin.value,
+    }
+
+    socket.send(JSON.stringify(payload))
   } catch (error: any) {
     loading.value = false
 

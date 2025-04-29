@@ -39,7 +39,10 @@ func run(ctx context.Context) error {
 			config.AmadeusAPIBaseURL,
 			util.HttpRequester{},
 		),
-		fapi.NewClient(config.FlightAPIKey, config.FlightAPIURL, fapi.Requester{}),
+		fapi.NewClient(config.FlightAPIKey,
+			config.FlightAPIURL,
+			util.HttpRequester{},
+		),
 		sky.NewClient(
 			config.AmadeusAPIKey,
 			config.SkyScannerRapidAPIHost,

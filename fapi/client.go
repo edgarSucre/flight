@@ -8,7 +8,6 @@ type Client struct {
 	requester flight.Requester
 }
 
-// TODO: remove environment from client
 func NewClient(apiKey, apiHost string, r flight.Requester) *Client {
 	return &Client{
 		host:      apiHost,

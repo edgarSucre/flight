@@ -15,6 +15,7 @@
   "dependencies": {
     "@primeuix/themes": "^1.0.3",
     "@primevue/forms": "^4.3.3",
+    "@vueuse/core": "^13.1.0",
     "axios": "^1.9.0",
     "primeflex": "^4.0.0",
     "primeicons": "^7.0.0",

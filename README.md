@@ -8,7 +8,7 @@ These values can be replaced directly in the app.env file or by passing them to 
 
 **I'm including the keys I used for development**, you can use those or create new ones. 
 Amadeus and Sky should work fine, however Flight API uses development credits.
-I've only have 16 left and every request consumes 2 credits.
+I've only have 14 left and every request consumes 2 credits.
 
 Alternatively you can use `Secrets` or `Vault` to manage these settings, the server won't fail as long as the values are loaded.
 
@@ -97,6 +97,11 @@ var handler http.Handler = mux
 handler = jwtMiddleware(handler, tokenMaker)
 
 return handler
+
+### WebSocket
+The **WS** upgrade happens once, after the flight info component is render. The search action sends
+a message using the **WS** connection, cancelling the previous ticker.
+
 ```
 ## Tests
 Only the token and http package have unit test, http been integration tests. 

@@ -10,6 +10,7 @@ import (
 	"github.com/edgarSucre/flight"
 	"github.com/edgarSucre/flight/token"
 	"github.com/edgarSucre/flight/util"
+	"github.com/rs/cors"
 )
 
 func NewServer(
@@ -22,7 +23,17 @@ func NewServer(
 
 	var handler http.Handler = mux
 
+	c := cors.New(cors.Options{
+		AllowedOrigins:   config.AllowedOrigins,
+		AllowCredentials: true,
+		// Debug:            true,
+		// Logger:           log.Default(),
+		AllowedHeaders: []string{"authorization", "content-type"},
+	})
+
 	handler = jwtMiddleware(handler, tokenMaker)
+	handler = c.Handler(handler)
+	// handler = logHandler(handler)
 
 	return handler
 }

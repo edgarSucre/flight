@@ -19,6 +19,7 @@ func addRoutes(
 	fs := http.FileServer(http.Dir("frontend/static"))
 
 	mux.Handle("GET /flights/search", handleSearch(providers))
+	mux.Handle("GET /flights/search/ws", handleWS(providers))
 	mux.Handle("POST /user/login", handleLogin(tokenMaker, config))
 	mux.HandleFunc("GET /health", handleHealth)
 	mux.Handle("GET /", fs)

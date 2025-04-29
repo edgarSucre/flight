@@ -22,8 +22,7 @@ type (
 	}
 )
 
-// TODO: change default duration
-const duration = time.Duration(time.Hour * 200)
+const duration = time.Duration(time.Minute * 15)
 
 func handleLogin(tokenMaker token.Maker, config util.Config) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

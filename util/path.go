@@ -8,7 +8,7 @@ import (
 func FilePath(fileName string) string {
 	fullPath, _ := os.Getwd()
 
-	// TODO: remove this
+	// for local debugging
 	if os.Getenv("debug") == "true" {
 		fullPath = path.Join(fullPath, "..")
 	}
