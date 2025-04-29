@@ -16,7 +16,7 @@ func addRoutes(
 	config util.Config,
 ) {
 
-	fs := http.FileServer(http.Dir("frontend/dist"))
+	fs := http.FileServer(http.Dir("frontend/static"))
 
 	mux.Handle("GET /flights/search", handleSearch(providers))
 	mux.Handle("POST /user/login", handleLogin(tokenMaker, config))
