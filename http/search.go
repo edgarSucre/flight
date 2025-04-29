@@ -23,6 +23,7 @@ func handleSearch(providers []flight.Provider) http.Handler {
 		params, err := buildParams(r)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
 		}
 
 		data, err := lookUpFlights(r.Context(), providers, params)
