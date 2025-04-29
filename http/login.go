@@ -8,6 +8,7 @@ import (
 
 	"github.com/edgarSucre/flight/token"
 	"github.com/edgarSucre/flight/util"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type (
@@ -35,7 +36,9 @@ func handleLogin(tokenMaker token.Maker, config util.Config) http.Handler {
 			return
 		}
 
-		if config.DefaultUserName != req.Username || config.DefaultUserPassword != req.Password {
+		err := bcrypt.CompareHashAndPassword([]byte(config.DefaultUserPassword), []byte(req.Password))
+
+		if config.DefaultUserName != req.Username || err != nil {
 			http.Error(w, "invalid credentials", http.StatusUnauthorized)
 			return
 		}
